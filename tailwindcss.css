@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* 定义自定义的工具类 */
+  .text-ellipsis {
+    @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+}
+
