@@ -1,13 +1,4 @@
-enum Message {
-  ICON_CLICK = "ICON_CLICK",
-  SHORTCUT_COMMAND = "SHORTCUT_COMMAND",
-  GET_BOOKMARK_TREE = "GET_BOOKMARK_TREE",
-  CREATE_BOOKMARK = "CREATE_BOOKMARK",
-  UPDATE_BOOKMARK = "UPDATE_BOOKMARK",
-  MOVE_BOOKMARK = "MOVE_BOOKMARK",
-  REMOVE_BOOKMARK = "REMOVE_BOOKMARK",
-  REMOVE_BOOKMARK_TREE = "REMOVE_BOOKMARK_TREE"
-}
+import { Message } from "./utils"
 
 /** 定义右键菜单列表 */
 const menuList: (chrome.contextMenus.CreateProperties & {

@@ -44,7 +44,7 @@ const Manage = () => {
 
   const matchedNodes = React.useMemo(() => {
     const options = {
-      dataSource
+      init
     }
     if (!keywords.length) {
       const jsxNodes = formattedTreeNodesTitle(dataSource, options)

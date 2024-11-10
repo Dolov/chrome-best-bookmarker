@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import TreeNodeTitleContainer from "./TreeNodeTitleContainer"
+
 export enum MatchTypeEnum {
   URL = "URL",
   DIR = "DIR",
@@ -49,12 +51,12 @@ export const formattedTreeNodesTitle = (treeNodes = [], options) => {
     }
     currentValue.push({
       ...item,
-      // title: (
-      //   <TreeNodeTitleContainer node={item} {...options}>
-      //     {titleJsx}
-      //   </TreeNodeTitleContainer>
-      // ),
-      title: titleJsx,
+      title: (
+        <TreeNodeTitleContainer node={item} {...options}>
+          {titleJsx}
+        </TreeNodeTitleContainer>
+      ),
+      // title: titleJsx,
       children: formattedTreeNodesTitle(children, options)
     })
     return currentValue
