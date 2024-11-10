@@ -1,5 +1,29 @@
 import * as React from "react"
 
+export enum MatchTypeEnum {
+  URL = "URL",
+  DIR = "DIR",
+  MIXIN = "MIXIN"
+}
+
+export const searchTypeState = {
+  [MatchTypeEnum.URL]: {
+    next() {
+      return MatchTypeEnum.DIR
+    }
+  },
+  [MatchTypeEnum.DIR]: {
+    next() {
+      return MatchTypeEnum.MIXIN
+    }
+  },
+  [MatchTypeEnum.MIXIN]: {
+    next() {
+      return MatchTypeEnum.URL
+    }
+  }
+}
+
 export const formatTreeNodes = (treeNodes = []) => {
   return treeNodes.reduce((currentValue, item) => {
     const { children = [] } = item
@@ -81,14 +105,14 @@ export const matchSearch = (keywords: string[], treeNode, options) => {
 
     // Push current node if it matches
     const text = highlightText(originalTitle, keywords, sensitive) // Get highlighted title
-    if (searchType === SearchTypeEnum.URL) {
+    if (searchType === MatchTypeEnum.URL) {
       if (matched || matchedChildren.length) {
         pushToResult(itemNode, text, matchedChildren)
         continue
       }
     }
 
-    if (searchType === SearchTypeEnum.DIR) {
+    if (searchType === MatchTypeEnum.DIR) {
       if (
         (url && parentMatched) ||
         (!url && (matched || parentMatched || matchedChildren.length))
@@ -98,7 +122,7 @@ export const matchSearch = (keywords: string[], treeNode, options) => {
       }
     }
 
-    if (searchType === SearchTypeEnum.MIXIN) {
+    if (searchType === MatchTypeEnum.MIXIN) {
       if (matched || matchedChildren.length || parentMatched) {
         pushToResult(itemNode, text, matchedChildren)
         continue
@@ -138,28 +162,4 @@ export function highlightText(
     index += 1 // Increment index for unique class
     return `<span class="highlight highlight-${index}">${substring}</span>` // Highlight matched text
   })
-}
-
-export enum SearchTypeEnum {
-  URL = "URL",
-  DIR = "DIR",
-  MIXIN = "MIXIN"
-}
-
-export const searchTypeState = {
-  [SearchTypeEnum.URL]: {
-    next() {
-      return SearchTypeEnum.DIR
-    }
-  },
-  [SearchTypeEnum.DIR]: {
-    next() {
-      return SearchTypeEnum.MIXIN
-    }
-  },
-  [SearchTypeEnum.MIXIN]: {
-    next() {
-      return SearchTypeEnum.URL
-    }
-  }
 }

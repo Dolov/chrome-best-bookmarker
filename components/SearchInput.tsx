@@ -25,7 +25,6 @@ const SearchInput: React.ForwardRefRenderFunction<
 ) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState<string[]>([])
-  const [focus, setFocus] = useState(false)
   const [inputValue, setInputValue] = useState("")
 
   // Expose focus and addKeyword to parent component via ref
@@ -45,6 +44,15 @@ const SearchInput: React.ForwardRefRenderFunction<
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInputValue = e.target.value
     setInputValue(newInputValue)
+    handleInputChange(newInputValue)
+  }
+
+  const handleInputChange = (inputValue) => {
+    const nextValue = [...value]
+    if (inputValue) {
+      nextValue.push(inputValue)
+    }
+    onChange && onChange(nextValue)
   }
 
   // Add or remove keyword when pressing Enter
@@ -68,15 +76,8 @@ const SearchInput: React.ForwardRefRenderFunction<
   }
 
   // Handle focus and blur events
-  const onFocus = () => setFocus(true)
   const onBlur = () => {
-    setFocus(false)
     handleEnterEvent(inputValue) // Save changes when losing focus
-  }
-
-  // Handle container click to focus input
-  const handleContainerClick = () => {
-    inputRef.current?.focus()
   }
 
   // Delete a specific keyword
@@ -93,33 +94,36 @@ const SearchInput: React.ForwardRefRenderFunction<
   }
 
   return (
-    <div
-      onClick={handleContainerClick}
-      className={classnames("flex", className)}>
-      <div className="mr-1 flex items-center">{prefix}</div>
+    <div className={classnames("flex", className)}>
+      <div className="mr-2 flex items-center">{prefix}</div>
       <div className="flex flex-1">
-        <div className="flex">
-          {value.map((item) => (
-            <div
-              key={item}
-              className="pr-2 pl-3 my-1 mr-1 bg-[#0000000f] rounded-[12px] flex justify-center items-center text-nowrap">
-              <span
-                onClick={() => editItem(item)}
-                className="max-w-[200px] ellipsis">
-                {item}
-              </span>
-              <button onClick={() => deleteItem(item)}>✕</button>
-            </div>
-          ))}
+        <div className="flex items-center">
+          {value.map((item) => {
+            return (
+              <div
+                key={item}
+                className="badge badge-ghost mr-1 py-3 whitespace-nowrap">
+                <span
+                  onClick={() => editItem(item)}
+                  className="mr-1 leading-[20px]">
+                  {item}
+                </span>
+                <div
+                  onClick={() => deleteItem(item)}
+                  className="text-[10px] btn btn-circle btn-sm min-h-0 w-4 h-4">
+                  ✕
+                </div>
+              </div>
+            )
+          })}
         </div>
         <input
           autoFocus
           ref={inputRef}
           type="text"
           value={inputValue}
-          onChange={onInputChange}
           onBlur={onBlur}
-          onFocus={onFocus}
+          onChange={onInputChange}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleEnterEvent(inputValue)

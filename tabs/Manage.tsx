@@ -1,16 +1,19 @@
+import { debounce } from "radash"
 import * as React from "react"
 
 import { useStorage } from "@plasmohq/storage/hook"
 
-import { CaseSensitive, MatchType, Union } from "~/components/SearchCondition"
+import { WhhSearchfolder } from "~/components/Icon"
+import { Case, MatchType, Union } from "~/components/SearchCondition"
 import SearchInput from "~/components/SearchInput"
 import FileTree from "~/components/Tree"
 import {
   formattedTreeNodesTitle,
   formatTreeNodes,
-  matchSearch
+  matchSearch,
+  MatchTypeEnum
 } from "~/components/utils"
-import { SearchType, Storage } from "~/utils"
+import { Storage } from "~/utils"
 
 import "~/tailwindcss.css"
 
@@ -19,7 +22,7 @@ const Manage = () => {
   const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
-  const [searchType] = useStorage(Storage.SEARCH_TYPE, SearchType.MIXIN)
+  const [searchType] = useStorage(Storage.SEARCH_TYPE, MatchTypeEnum.MIXIN)
 
   React.useEffect(() => {
     init()
@@ -29,6 +32,8 @@ const Manage = () => {
     if (words.join() === keywords.join()) return
     setKeywords(words)
   }
+
+  const debounceOnChange = debounce({ delay: 300 }, onChange)
 
   const init = () => {
     chrome.bookmarks.getTree((bookmarkTreeNodes) => {
@@ -58,21 +63,18 @@ const Manage = () => {
   return (
     <div className="h-screen w-screen flex justify-center">
       <div className="w-[1000px] flex flex-col">
-        <div className="my-4">
+        <div className="mb-4 mt-6">
           <label className="input input-bordered flex items-center gap-2 rounded-full">
             <SearchInput
               className="flex-1"
-              onChange={onChange}
+              onChange={debounceOnChange}
               onPressEnter={init}
+              prefix={<WhhSearchfolder className="text-neutral opacity-70" />}
               suffix={
                 <div className="actions flex">
-                  <CaseSensitive />
-                  <span className="ml-1">
-                    <Union />
-                  </span>
-                  <span className="ml-1">
-                    <MatchType />
-                  </span>
+                  <Case />
+                  <Union className="ml-1" />
+                  <MatchType className="ml-1" />
                 </div>
               }
             />

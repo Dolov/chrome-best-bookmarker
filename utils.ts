@@ -4,9 +4,3 @@ export enum Storage {
   LAST_PARENT_ID = "LAST_PARENT_ID",
   CASE_SENSITIVE = "CASE_SENSITIVE"
 }
-
-export enum SearchType {
-  URL = "URL",
-  DIR = "DIR",
-  MIXIN = "MIXIN"
-}

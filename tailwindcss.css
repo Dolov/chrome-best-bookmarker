@@ -8,7 +8,7 @@
     @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
   }
 
-  .flex-center {
+  .center {
     @apply flex justify-center items-center;
   }
 }
