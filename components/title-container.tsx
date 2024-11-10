@@ -2,7 +2,7 @@ import React from "react"
 
 import { Message } from "~/utils"
 
-import { MaterialSymbolsBookmarkRemove } from "./Icon"
+import { MaterialSymbolsBookmarkRemove } from "./iconaf"
 
 const TreeNodeTitleContainer: React.FC<{
   init(): void

@@ -12,7 +12,7 @@ import {
   MaterialSymbolsMatchCaseRounded,
   PhIntersectThreeFill,
   PhIntersectThreeLight
-} from "./Icon"
+} from "./iconaf"
 import { MatchTypeEnum, searchTypeState } from "./utils"
 
 const Case = () => {

@@ -3,9 +3,6 @@ import * as React from "react"
 
 import { useStorage } from "@plasmohq/storage/hook"
 
-import { WhhSearchfolder } from "~/components/Icon"
-import { Case, MatchType, Union } from "~/components/SearchCondition"
-import SearchInput from "~/components/SearchInput"
 import FileTree from "~/components/Tree"
 import {
   formattedTreeNodesTitle,
@@ -13,7 +10,12 @@ import {
   matchSearch,
   MatchTypeEnum
 } from "~/components/utils"
-import { Storage } from "~/utils"
+import { Message, Storage } from "~/utils"
+import GlobalActions from "~components/global-actions"
+import GlobalContext from "~components/global-context"
+import { WhhSearchfolder } from "~components/iconaf"
+import { Case, MatchType, Union } from "~components/search-condition"
+import SearchInput from "~components/search-input"
 
 import "~/tailwindcss.css"
 
@@ -36,10 +38,15 @@ const Manage = () => {
   const debounceOnChange = debounce({ delay: 300 }, onChange)
 
   const init = () => {
-    chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-      const formattedTreeNodes = formatTreeNodes(bookmarkTreeNodes[0].children)
-      setDataSource(formattedTreeNodes)
-    })
+    chrome.runtime.sendMessage(
+      { action: Message.GET_BOOKMARK_TREE },
+      (bookmarkTreeNodes) => {
+        const formattedTreeNodes = formatTreeNodes(
+          bookmarkTreeNodes[0].children
+        )
+        setDataSource(formattedTreeNodes)
+      }
+    )
   }
 
   const matchedNodes = React.useMemo(() => {
@@ -62,6 +69,7 @@ const Manage = () => {
 
   return (
     <div className="h-screen w-screen flex justify-center">
+      <GlobalActions />
       <div className="w-[1000px] flex flex-col">
         <div className="mb-4 mt-6">
           <label className="input input-bordered flex items-center gap-2 rounded-full">

@@ -1,11 +1,17 @@
 import * as React from "react"
 
-import TreeNodeTitleContainer from "./TreeNodeTitleContainer"
+import TreeNodeTitleContainer from "./title-container"
 
 export enum MatchTypeEnum {
   URL = "URL",
   DIR = "DIR",
   MIXIN = "MIXIN"
+}
+
+export interface BookmarkProps {
+  id: string
+  title: string
+  url?: string
 }
 
 export const searchTypeState = {
