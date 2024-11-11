@@ -10,11 +10,15 @@ const GlobalContext = React.createContext<{
   setContextMenuPosition: React.Dispatch<
     React.SetStateAction<{ x: number; y: number } | null>
   >
+  init(): void
+  setInit: React.Dispatch<React.SetStateAction<() => void>>
 }>({
   contextMenuNode: null,
   contextMenuPosition: null,
   setContextMenuNode: () => {},
-  setContextMenuPosition: () => {}
+  setContextMenuPosition: () => {},
+  init: () => {},
+  setInit: () => {}
 })
 
 // Step 2: Create a GlobalProvider component to wrap your app
@@ -23,10 +27,13 @@ export const GlobalProvider: React.FC<{
 }> = ({ children }) => {
   const [contextMenuNode, setContextMenuNode] =
     React.useState<HTMLElement | null>(null)
+
   const [contextMenuPosition, setContextMenuPosition] = React.useState<{
     x: number
     y: number
   } | null>(null)
+
+  const [init, setInit] = React.useState<() => void>(null)
 
   return (
     <GlobalContext.Provider
@@ -34,7 +41,9 @@ export const GlobalProvider: React.FC<{
         contextMenuNode,
         contextMenuPosition,
         setContextMenuNode,
-        setContextMenuPosition
+        setContextMenuPosition,
+        init,
+        setInit
       }}>
       {children}
     </GlobalContext.Provider>
@@ -51,5 +60,3 @@ export const useGlobalContext = () => {
 
   return context
 }
-
-export default GlobalContext

@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* 定义自定义的工具类 */
-  .text-ellipsis {
-    @apply overflow-ellipsis overflow-hidden whitespace-nowrap;
-  }
-
   .center {
     @apply flex justify-center items-center;
   }
+}
+
+.text-ellipsis {
+  @apply overflow-hidden whitespace-nowrap;
+  text-overflow: ellipsis;
 }
 
 

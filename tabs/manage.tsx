@@ -3,7 +3,7 @@ import * as React from "react"
 
 import { useStorage } from "@plasmohq/storage/hook"
 
-import FileTree from "~/components/Tree"
+import FileTree from "~/components/tree"
 import {
   formattedTreeNodesTitle,
   formatTreeNodes,
@@ -12,14 +12,15 @@ import {
 } from "~/components/utils"
 import { Message, Storage } from "~/utils"
 import GlobalActions from "~components/global-actions"
-import GlobalContext from "~components/global-context"
-import { WhhSearchfolder } from "~components/iconaf"
+import { GlobalProvider, useGlobalContext } from "~components/global-provider"
+import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
 
 import "~/tailwindcss.css"
 
 const Manage = () => {
+  const { contextMenuNode, setInit } = useGlobalContext()
   const [dataSource, setDataSource] = React.useState([])
   const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
@@ -44,6 +45,7 @@ const Manage = () => {
         const formattedTreeNodes = formatTreeNodes(
           bookmarkTreeNodes[0].children
         )
+        setInit(() => init)
         setDataSource(formattedTreeNodes)
       }
     )
@@ -67,6 +69,8 @@ const Manage = () => {
     return formattedTreeNodesTitle(matchedNodes, options)
   }, [keywords, dataSource, sensitive, searchType, union])
 
+  const visible = matchedNodes.length > 0
+
   return (
     <div className="h-screen w-screen flex justify-center">
       <GlobalActions />
@@ -89,11 +93,19 @@ const Manage = () => {
           </label>
         </div>
         <div className="flex-1 rounded-lg overflow-auto mb-2">
-          <FileTree data={matchedNodes} />
+          {visible && (
+            <FileTree data={matchedNodes} activeId={contextMenuNode?.id} />
+          )}
         </div>
       </div>
     </div>
   )
 }
 
-export default Manage
+export default () => {
+  return (
+    <GlobalProvider>
+      <Manage />
+    </GlobalProvider>
+  )
+}

@@ -1,8 +1,18 @@
 import React from "react"
 
+import { useGlobalContext } from "~/components/global-provider"
 import { Message } from "~/utils"
 
-import { MaterialSymbolsBookmarkRemove } from "./iconaf"
+import {
+  FluentFolderAdd24Filled,
+  MaterialSymbolsBookmarkRemove,
+  MaterialSymbolsContentCopyRounded,
+  MaterialSymbolsDelete,
+  MaterialSymbolsDriveFileMoveRounded,
+  MdiRename,
+  MingcuteSearch2Fill,
+  RiDownloadCloud2Fill
+} from "./icons"
 
 const TreeNodeTitleContainer: React.FC<{
   init(): void
@@ -13,6 +23,7 @@ const TreeNodeTitleContainer: React.FC<{
     title: string
   }
 }> = (props) => {
+  const context = useGlobalContext()
   const { children, node, init } = props
   const { id, url } = node
 
@@ -28,8 +39,17 @@ const TreeNodeTitleContainer: React.FC<{
     )
   }
 
+  const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    context.setContextMenuNode(node)
+    context.setContextMenuPosition({
+      x: e.clientX,
+      y: e.clientY
+    })
+  }
+
   return (
-    <div className="flex items-center group">
+    <div onContextMenu={onContextMenu} className="flex items-center group py-1">
       <span className="flex-1">{children}</span>
       {url && (
         <button
