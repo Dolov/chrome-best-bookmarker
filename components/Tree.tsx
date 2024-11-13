@@ -4,7 +4,9 @@ import * as React from "react"
 import { FileIcon, TinyFolderIcon } from "./icons"
 
 const TreeItem = ({ data, activeId }) => {
-  const active = data.id === activeId
+  const { id, children = [] } = data
+  const active = id === activeId
+
   return (
     <li>
       {data.url ? (
@@ -19,10 +21,9 @@ const TreeItem = ({ data, activeId }) => {
             {data.title}
           </summary>
           <ul>
-            {data.children &&
-              data.children.map((child, index) => (
-                <TreeItem key={index} data={child} activeId={activeId} />
-              ))}
+            {children.map((child) => (
+              <TreeItem key={child.id} data={child} activeId={activeId} />
+            ))}
           </ul>
         </details>
       )}

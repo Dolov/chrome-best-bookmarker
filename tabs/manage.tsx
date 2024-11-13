@@ -27,7 +27,6 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
   props
 ) => {
   const { init, dataSource } = props
-  console.log("dataSource: ", dataSource)
   const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
