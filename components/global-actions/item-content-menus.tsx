@@ -15,6 +15,17 @@ import {
   RiDownloadCloud2Fill,
   TinyFolderIcon
 } from "../icons"
+import { copyTextToClipboard, getBookmarksToText } from "../utils"
+
+enum Actions {
+  COPY = "copy",
+  MOVE = "move",
+  RENAME = "rename",
+  SEARCH = "search",
+  DELETE = "delete",
+  DOWNLOAD = "download",
+  DELETE_DIR = "delete-dir"
+}
 
 const ItemContentMenus: React.FC<{}> = () => {
   const menuRef = React.useRef(null)
@@ -48,39 +59,39 @@ const ItemContentMenus: React.FC<{}> = () => {
     className?: string
   }[] = React.useMemo(() => {
     if (!contextMenuNode) return []
-    const { url, title } = contextMenuNode
+    const { id, url } = contextMenuNode
 
     const actions = {
       rename: {
         title: "重命名",
         Icon: MdiRename,
-        key: "rename"
+        key: Actions.RENAME
       },
       move: {
         title: "移动",
         Icon: MaterialSymbolsDriveFileMoveRounded,
-        key: "move"
+        key: Actions.MOVE
       },
       search: {
         title: "搜索",
         Icon: MingcuteSearch2Fill,
-        key: "search"
+        key: Actions.SEARCH
       },
       copy: {
         title: "复制",
         Icon: MaterialSymbolsContentCopyRounded,
-        key: "copy"
+        key: Actions.COPY
       },
       delete: {
         title: "删除",
         Icon: MaterialSymbolsBookmarkRemove,
-        key: "delete",
+        key: Actions.DELETE,
         className: "text-error font-bold"
       },
       deleteDir: {
         title: "删除",
         Icon: MaterialSymbolsDelete,
-        key: "delete-dir",
+        key: Actions.DELETE_DIR,
         className: "text-error font-bold"
       }
     }
@@ -105,7 +116,7 @@ const ItemContentMenus: React.FC<{}> = () => {
 
   const handleAction = (action: (typeof actions)[0]) => {
     const { key } = action
-    if (key === "delete") {
+    if (key === Actions.DELETE) {
       chrome.runtime.sendMessage(
         {
           id: contextMenuNode.id,
@@ -116,10 +127,9 @@ const ItemContentMenus: React.FC<{}> = () => {
           context.init()
         }
       )
-      return
     }
 
-    if (key === "delete-dir") {
+    if (key === Actions.DELETE_DIR) {
       chrome.runtime.sendMessage(
         {
           id: contextMenuNode.id,
@@ -130,7 +140,17 @@ const ItemContentMenus: React.FC<{}> = () => {
           context.init()
         }
       )
-      return
+    }
+
+    if (key === Actions.COPY) {
+      const { url, children } = contextMenuNode
+      if (url) {
+        copyTextToClipboard(contextMenuNode.url)
+      } else {
+        const text = getBookmarksToText(children)
+        copyTextToClipboard(text)
+      }
+      clear()
     }
   }
 

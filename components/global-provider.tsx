@@ -26,7 +26,7 @@ export const GlobalProvider: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   const [contextMenuNode, setContextMenuNode] =
-    React.useState<HTMLElement | null>(null)
+    React.useState<BookmarkProps | null>(null)
 
   const [contextMenuPosition, setContextMenuPosition] = React.useState<{
     x: number

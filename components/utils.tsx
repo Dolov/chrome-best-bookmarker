@@ -12,6 +12,7 @@ export interface BookmarkProps {
   id: string
   title: string
   url?: string
+  children?: BookmarkProps[]
 }
 
 export const searchTypeState = {
@@ -170,4 +171,35 @@ export function highlightText(
     index += 1 // Increment index for unique class
     return `<span class="highlight highlight-${index}">${substring}</span>` // Highlight matched text
   })
+}
+
+/**
+ * Copies the given text to the clipboard.
+ *
+ * @param {string} text - The text to be copied.
+ * @return {void} This function does not return anything.
+ */
+export const copyTextToClipboard = (text: string) => {
+  const textArea = document.createElement("textarea")
+  textArea.value = text
+  document.body.appendChild(textArea)
+  textArea.select()
+
+  try {
+    document.execCommand("copy")
+  } catch (err) {
+    console.log("copy err: ", err)
+  }
+  document.body.removeChild(textArea)
+}
+
+export const getBookmarksToText = (children = []) => {
+  return children.reduce((text, item) => {
+    const { url, originalTitle } = item
+    if (url) {
+      return `${text}\n\n${originalTitle}\n${url}`
+    }
+    const childrenText = getBookmarksToText(item.children)
+    return `${text}\n\n${childrenText}`
+  }, "")
 }
