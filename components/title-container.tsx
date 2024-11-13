@@ -1,6 +1,6 @@
 import React from "react"
 
-import { useGlobalContext } from "~/components/global-provider"
+import { GlobalActionContext } from "~/components/global-provider"
 import { Message } from "~/utils"
 
 import {
@@ -15,7 +15,6 @@ import {
 } from "./icons"
 
 const TreeNodeTitleContainer: React.FC<{
-  init(): void
   children: React.ReactNode
   node: {
     id: string
@@ -23,8 +22,8 @@ const TreeNodeTitleContainer: React.FC<{
     title: string
   }
 }> = (props) => {
-  const context = useGlobalContext()
-  const { children, node, init } = props
+  const globalActions = React.useContext(GlobalActionContext)
+  const { children, node } = props
   const { id, url } = node
 
   const deleteBookmark = () => {
@@ -34,19 +33,26 @@ const TreeNodeTitleContainer: React.FC<{
         action: Message.REMOVE_BOOKMARK
       },
       () => {
-        init()
+        globalActions.refresh()
       }
     )
   }
 
   const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    context.setContextMenuNode(node)
-    context.setContextMenuPosition({
+    globalActions.setContextMenuNode(node)
+    globalActions.setContextMenuPosition({
       x: e.clientX,
       y: e.clientY
     })
   }
+
+  React.useEffect(() => {
+    console.log("12")
+    return () => {
+      console.log("卸载")
+    }
+  }, [])
 
   return (
     <div onContextMenu={onContextMenu} className="flex items-center group py-1">
@@ -62,4 +68,4 @@ const TreeNodeTitleContainer: React.FC<{
   )
 }
 
-export default TreeNodeTitleContainer
+export default React.memo(TreeNodeTitleContainer)

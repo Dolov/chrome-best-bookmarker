@@ -10,27 +10,31 @@ import {
   matchSearch,
   MatchTypeEnum
 } from "~/components/utils"
+import type { BookmarkProps } from "~/components/utils"
 import { Message, Storage } from "~/utils"
 import GlobalActions from "~components/global-actions"
-import { GlobalProvider, useGlobalContext } from "~components/global-provider"
+import {
+  GlobalActionContext,
+  GlobalStateContext
+} from "~components/global-provider"
 import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
 
 import "~/tailwindcss.css"
 
-const Manage = () => {
-  const { contextMenuNode, setInit } = useGlobalContext()
-  const [dataSource, setDataSource] = React.useState([])
+const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
+  props
+) => {
+  const { init, dataSource } = props
+  console.log("dataSource: ", dataSource)
   const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
   const [searchType] = useStorage(Storage.SEARCH_TYPE, MatchTypeEnum.MIXIN)
 
-  React.useEffect(() => {
-    init()
-    setInit(() => init)
-  }, [])
+  const globalState = React.useContext(GlobalStateContext)
+  const { contextMenuNode } = globalState
 
   const onChange = (words: string[]) => {
     if (words.join() === keywords.join()) return
@@ -39,24 +43,9 @@ const Manage = () => {
 
   const debounceOnChange = debounce({ delay: 300 }, onChange)
 
-  const init = () => {
-    chrome.runtime.sendMessage(
-      { action: Message.GET_BOOKMARK_TREE },
-      (bookmarkTreeNodes) => {
-        const formattedTreeNodes = formatTreeNodes(
-          bookmarkTreeNodes[0].children
-        )
-        setDataSource(formattedTreeNodes)
-      }
-    )
-  }
-
   const matchedNodes = React.useMemo(() => {
-    const options = {
-      init
-    }
     if (!keywords.length) {
-      const jsxNodes = formattedTreeNodesTitle(dataSource, options)
+      const jsxNodes = formattedTreeNodesTitle(dataSource)
       return jsxNodes
     }
 
@@ -66,7 +55,7 @@ const Manage = () => {
       searchType
     })
 
-    return formattedTreeNodesTitle(matchedNodes, options)
+    return formattedTreeNodesTitle(matchedNodes)
   }, [keywords, dataSource, sensitive, searchType, union])
 
   const visible = matchedNodes.length > 0
@@ -103,9 +92,50 @@ const Manage = () => {
 }
 
 export default () => {
+  const [dataSource, setDataSource] = React.useState([])
+  const [contextMenuNode, setContextMenuNode] =
+    React.useState<BookmarkProps>(null)
+  const [contextMenuPosition, setContextMenuPosition] = React.useState<{
+    x: number
+    y: number
+  }>(null)
+
+  React.useEffect(() => {
+    init()
+  }, [])
+
+  const init = () => {
+    chrome.runtime.sendMessage(
+      { action: Message.GET_BOOKMARK_TREE },
+      (bookmarkTreeNodes) => {
+        const formattedTreeNodes = formatTreeNodes(
+          bookmarkTreeNodes[0].children
+        )
+        setDataSource(formattedTreeNodes)
+      }
+    )
+  }
+
+  const stateValues = React.useMemo(() => {
+    return {
+      contextMenuNode,
+      contextMenuPosition
+    }
+  }, [contextMenuNode, contextMenuPosition])
+
+  const functionValues = React.useMemo(() => {
+    return {
+      refresh: init,
+      setContextMenuNode,
+      setContextMenuPosition
+    }
+  }, [])
+
   return (
-    <GlobalProvider>
-      <Manage />
-    </GlobalProvider>
+    <GlobalActionContext.Provider value={functionValues}>
+      <GlobalStateContext.Provider value={stateValues}>
+        <Manage dataSource={dataSource} init={init} />
+      </GlobalStateContext.Provider>
+    </GlobalActionContext.Provider>
   )
 }

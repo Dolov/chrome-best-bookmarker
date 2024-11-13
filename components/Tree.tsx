@@ -44,8 +44,8 @@ const Tree = ({
       "menu menu-xs bg-base-200 rounded-lg w-full",
       className
     )}>
-    {data.map((data, index) => (
-      <TreeItem key={index} data={data} activeId={activeId} />
+    {data.map((item) => (
+      <TreeItem key={item.id} data={item} activeId={activeId} />
     ))}
   </ul>
 )

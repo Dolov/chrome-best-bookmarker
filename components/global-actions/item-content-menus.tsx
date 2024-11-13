@@ -2,7 +2,7 @@ import React from "react"
 
 import { Message } from "~/utils"
 
-import { useGlobalContext } from "../global-provider"
+import { GlobalActionContext, GlobalStateContext } from "../global-provider"
 import {
   FileIcon,
   FluentFolderAdd24Filled,
@@ -29,12 +29,14 @@ enum Actions {
 
 const ItemContentMenus: React.FC<{}> = () => {
   const menuRef = React.useRef(null)
-  const context = useGlobalContext()
-  const { contextMenuNode, contextMenuPosition } = context
+  const globalState = React.useContext(GlobalStateContext)
+  const globalActions = React.useContext(GlobalActionContext)
+
+  const { contextMenuNode, contextMenuPosition } = globalState
 
   const clear = () => {
-    context.setContextMenuNode(null)
-    context.setContextMenuPosition(null)
+    globalActions.setContextMenuNode(null)
+    globalActions.setContextMenuPosition(null)
   }
 
   const handleClickOutside = (e) => {
@@ -124,7 +126,7 @@ const ItemContentMenus: React.FC<{}> = () => {
         },
         () => {
           clear()
-          context.init()
+          globalActions.refresh()
         }
       )
     }
@@ -137,7 +139,7 @@ const ItemContentMenus: React.FC<{}> = () => {
         },
         () => {
           clear()
-          context.init()
+          globalActions.refresh()
         }
       )
     }
@@ -150,6 +152,10 @@ const ItemContentMenus: React.FC<{}> = () => {
         const text = getBookmarksToText(children)
         copyTextToClipboard(text)
       }
+      clear()
+    }
+
+    if (key === Actions.SEARCH) {
       clear()
     }
   }
