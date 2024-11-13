@@ -80,7 +80,7 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
             />
           </label>
         </div>
-        <div className="flex-1 rounded-lg overflow-auto mb-2">
+        <div className="flex-1 rounded-lg overflow-auto mb-2 px-4">
           {visible && (
             <FileTree data={matchedNodes} activeId={contextMenuNode?.id} />
           )}

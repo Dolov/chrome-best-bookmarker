@@ -19,25 +19,32 @@
   font-weight: 900;
 }
 .highlight-1 {
-  color: #f5222d;
+  /* color: #f5222d; */
+  @apply text-secondary;
 }
 .highlight-2 {
-  color: #faad14;
+  /* color: #faad14; */
+  @apply text-accent;
 }
 .highlight-3 {
-  color: #a0d911;
+  /* color: #a0d911; */
+  @apply text-primary;
 }
 .highlight-4 {
-  color: #eb2f96;
+  /* color: #eb2f96; */
+  @apply text-info;
 }
 .highlight-5 {
-  color: #722ed1;
+  /* color: #722ed1; */
+  @apply text-success;
 }
 .highlight-6 {
-  color: #1677ff;
+  /* color: #1677ff; */
+  @apply text-warning;
 }
 .highlight-7 {
   color: #13c2c2;
+  @apply text-error;
 }
 .highlight-8 {
   color: #2f54eb;
