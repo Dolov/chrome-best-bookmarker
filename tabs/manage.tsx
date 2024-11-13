@@ -29,6 +29,7 @@ const Manage = () => {
 
   React.useEffect(() => {
     init()
+    setInit(() => init)
   }, [])
 
   const onChange = (words: string[]) => {
@@ -45,7 +46,6 @@ const Manage = () => {
         const formattedTreeNodes = formatTreeNodes(
           bookmarkTreeNodes[0].children
         )
-        setInit(() => init)
         setDataSource(formattedTreeNodes)
       }
     )

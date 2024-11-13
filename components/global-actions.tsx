@@ -50,44 +50,66 @@ const ItemContentMenu: React.FC<{}> = () => {
     return () => document.removeEventListener("click", handleClickOutside)
   }, [contextMenuNode])
 
-  const actions = React.useMemo(() => {
+  const actions: {
+    key: string
+    Icon: React.FC<React.SVGProps<SVGSVGElement>>
+    title: string
+    className?: string
+  }[] = React.useMemo(() => {
     if (!contextMenuNode) return []
     const { url, title } = contextMenuNode
-    const DeleteIcon = url
-      ? MaterialSymbolsBookmarkRemove
-      : MaterialSymbolsDelete
+
+    const actions = {
+      rename: {
+        title: "重命名",
+        Icon: MdiRename,
+        key: "rename"
+      },
+      move: {
+        title: "移动",
+        Icon: MaterialSymbolsDriveFileMoveRounded,
+        key: "move"
+      },
+      search: {
+        title: "搜索",
+        Icon: MingcuteSearch2Fill,
+        key: "search"
+      },
+      copy: {
+        title: "复制",
+        Icon: MaterialSymbolsContentCopyRounded,
+        key: "copy"
+      },
+      delete: {
+        title: "删除",
+        Icon: MaterialSymbolsBookmarkRemove,
+        key: "delete",
+        className: "text-error font-bold"
+      },
+      deleteDir: {
+        title: "删除",
+        Icon: MaterialSymbolsDelete,
+        key: "delete-dir",
+        className: "text-error font-bold"
+      }
+    }
 
     if (url) {
       return [
-        {
-          title: "重命名",
-          Icon: MdiRename,
-          key: "rename"
-        },
-        {
-          title: "移动",
-          Icon: MaterialSymbolsDriveFileMoveRounded,
-          key: "move"
-        },
-        {
-          title: "搜索",
-          Icon: MingcuteSearch2Fill,
-          key: "search"
-        },
-        {
-          title: "复制",
-          Icon: MaterialSymbolsContentCopyRounded,
-          key: "copy"
-        },
-        {
-          title: "删除",
-          Icon: DeleteIcon,
-          key: "delete",
-          className: "text-error font-bold"
-        }
+        actions.rename,
+        actions.search,
+        actions.copy,
+        actions.move,
+        actions.delete
       ]
     }
-    return []
+    return [
+      actions.rename,
+      actions.search,
+      actions.copy,
+      actions.move,
+      actions.deleteDir
+    ]
   }, [contextMenuNode])
 
   const handleAction = (action: (typeof actions)[0]) => {
@@ -103,6 +125,21 @@ const ItemContentMenu: React.FC<{}> = () => {
           context.init()
         }
       )
+      return
+    }
+
+    if (key === "delete-dir") {
+      chrome.runtime.sendMessage(
+        {
+          id: contextMenuNode.id,
+          action: Message.REMOVE_BOOKMARK_TREE
+        },
+        () => {
+          clear()
+          context.init()
+        }
+      )
+      return
     }
   }
 

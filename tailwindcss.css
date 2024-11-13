@@ -45,3 +45,8 @@
 .highlight-9 {
   color: #fadb14;
 }
+
+summary.active {
+  @apply bg-neutral;
+  @apply text-neutral-content;
+}

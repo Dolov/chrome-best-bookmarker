@@ -14,7 +14,7 @@ const TreeItem = ({ data, activeId }) => {
         </div>
       ) : (
         <details open>
-          <summary className="py-0">
+          <summary className={classnames("py-0", { active })}>
             <TinyFolderIcon />
             {data.title}
           </summary>
