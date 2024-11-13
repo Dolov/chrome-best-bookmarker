@@ -2,7 +2,7 @@ import React from "react"
 
 import { Message } from "~/utils"
 
-import { useGlobalContext } from "./global-provider"
+import { useGlobalContext } from "../global-provider"
 import {
   FileIcon,
   FluentFolderAdd24Filled,
@@ -14,18 +14,9 @@ import {
   MingcuteSearch2Fill,
   RiDownloadCloud2Fill,
   TinyFolderIcon
-} from "./icons"
+} from "../icons"
 
-const GlobalActions: React.FC<{}> = (props) => {
-  const {} = props
-  return (
-    <div>
-      <ItemContentMenu />
-    </div>
-  )
-}
-
-const ItemContentMenu: React.FC<{}> = () => {
+const ItemContentMenus: React.FC<{}> = () => {
   const menuRef = React.useRef(null)
   const context = useGlobalContext()
   const { contextMenuNode, contextMenuPosition } = context
@@ -178,4 +169,4 @@ const ItemContentMenu: React.FC<{}> = () => {
   )
 }
 
-export default GlobalActions
+export default ItemContentMenus
