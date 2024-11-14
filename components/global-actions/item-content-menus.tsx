@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Fragment } from "react"
 
 import { Message } from "~/utils"
 
@@ -16,6 +16,7 @@ import {
   TinyFolderIcon
 } from "../icons"
 import { copyTextToClipboard, getBookmarksToText } from "../utils"
+import type { BookmarkProps } from "../utils"
 
 const ROOT_IDS = ["0", "1", "2"]
 
@@ -31,8 +32,9 @@ enum Actions {
 
 const ItemContentMenus: React.FC<{
   addKeyword: (keyword: string) => void
+  handleMove: (node: BookmarkProps) => void
 }> = (props) => {
-  const { addKeyword } = props
+  const { addKeyword, handleMove } = props
   const menuRef = React.useRef(null)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
@@ -169,6 +171,11 @@ const ItemContentMenus: React.FC<{
       addKeyword(originalTitle)
       clear()
     }
+
+    if (key === Actions.MOVE) {
+      handleMove(contextMenuNode)
+      clear()
+    }
   }
 
   if (!contextMenuNode) return null
@@ -177,32 +184,34 @@ const ItemContentMenus: React.FC<{
   const TitleIcon = url ? FileIcon : TinyFolderIcon
 
   return (
-    <ul
-      ref={menuRef}
-      tabIndex={0}
-      style={{ top: contextMenuPosition?.y, left: contextMenuPosition?.x }}
-      className="dropdown-content menu bg-base-100 rounded-box z-[1] min-w-40 max-w-52 p-2 shadow fixed">
-      <li title={title} className="menu-title w-full">
-        <p className="w-full flex items-center">
-          <TitleIcon className="w-4 min-w-4" />
-          <span className="ml-2 flex-1 text-ellipsis">{title}</span>
-        </p>
-      </li>
-      {actions.map((action) => {
-        const { key, title, Icon, className } = action
-        return (
-          <li
-            key={key}
-            className={className}
-            onClick={() => handleAction(action)}>
-            <a>
-              <Icon className="text-lg" />
-              {title}
-            </a>
-          </li>
-        )
-      })}
-    </ul>
+    <Fragment>
+      <ul
+        ref={menuRef}
+        style={{ top: contextMenuPosition?.y, left: contextMenuPosition?.x }}
+        tabIndex={0}
+        className="dropdown-content menu bg-base-100 rounded-box z-[1] min-w-40 max-w-52 p-2 shadow fixed">
+        <li title={title} className="menu-title w-full">
+          <p className="w-full flex items-center">
+            <TitleIcon className="w-4 min-w-4" />
+            <span className="ml-2 flex-1 text-ellipsis">{title}</span>
+          </p>
+        </li>
+        {actions.map((action) => {
+          const { key, title, Icon, className } = action
+          return (
+            <li
+              key={key}
+              className={className}
+              onClick={() => handleAction(action)}>
+              <a>
+                <Icon className="text-lg" />
+                {title}
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </Fragment>
   )
 }
 

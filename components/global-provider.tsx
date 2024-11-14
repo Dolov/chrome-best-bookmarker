@@ -13,9 +13,11 @@ export const GlobalActionContext = React.createContext<{
 })
 
 export const GlobalStateContext = React.createContext<{
+  dataSource: BookmarkProps[]
   contextMenuNode: BookmarkProps
   contextMenuPosition: { x: number; y: number }
 }>({
+  dataSource: [],
   contextMenuNode: null,
   contextMenuPosition: null
 })

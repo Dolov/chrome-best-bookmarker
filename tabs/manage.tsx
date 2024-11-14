@@ -7,6 +7,7 @@ import FileTree from "~/components/tree"
 import {
   formattedTreeNodesTitle,
   formatTreeNodes,
+  getDirectories,
   matchSearch,
   MatchTypeEnum
 } from "~/components/utils"
@@ -125,6 +126,7 @@ export default () => {
 
   const stateValues = React.useMemo(() => {
     return {
+      dataSource,
       contextMenuNode,
       contextMenuPosition
     }

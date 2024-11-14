@@ -208,3 +208,20 @@ export const getBookmarksToText = (children = []) => {
     return `${text}\n\n${childrenText}`
   }, "")
 }
+
+export const getDirectories = (treeData = [], excludeChildrenNodeId = "") => {
+  return treeData.reduce((currentValue, item) => {
+    if (!item) return currentValue
+    const { children = [], url, id } = item
+    if (url) return currentValue
+
+    if (excludeChildrenNodeId === id) {
+      return currentValue
+    }
+
+    item.children = getDirectories(children, excludeChildrenNodeId)
+
+    currentValue.push(item)
+    return currentValue
+  }, [])
+}
