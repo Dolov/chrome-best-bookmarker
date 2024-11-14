@@ -20,6 +20,7 @@ import {
 import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
+import type { SearchInputRefProps } from "~components/search-input"
 
 import "~/tailwindcss.css"
 
@@ -27,6 +28,7 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
   props
 ) => {
   const { init, dataSource } = props
+  const searchInputRef = React.useRef<SearchInputRefProps>(null)
   const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
@@ -57,15 +59,21 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
     return formattedTreeNodesTitle(matchedNodes)
   }, [keywords, dataSource, sensitive, searchType, union])
 
+  const addKeyword = (keyword: string) => {
+    if (!searchInputRef.current) return
+    searchInputRef.current.addKeyword(keyword)
+  }
+
   const visible = matchedNodes.length > 0
 
   return (
     <div className="h-screen w-screen flex justify-center">
-      <GlobalActions />
+      <GlobalActions addKeyword={addKeyword} />
       <div className="w-[1000px] flex flex-col">
         <div className="mb-4 mt-6">
           <label className="input input-bordered flex items-center gap-2 rounded-full">
             <SearchInput
+              ref={searchInputRef}
               className="flex-1"
               onChange={debounceOnChange}
               onPressEnter={init}

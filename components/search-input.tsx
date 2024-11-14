@@ -94,9 +94,9 @@ const SearchInput: React.ForwardRefRenderFunction<
   }
 
   return (
-    <div className={classnames("flex", className)}>
+    <div className={classnames("flex", "w-full", className)}>
       <div className="mr-2 flex items-center">{prefix}</div>
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-auto">
         <div className="flex items-center">
           {value.map((item) => {
             return (
@@ -137,7 +137,7 @@ const SearchInput: React.ForwardRefRenderFunction<
           className="border-none outline-none text-[14px] w-full"
         />
       </div>
-      {suffix}
+      <div className="pl-4 rounded-full">{suffix}</div>
     </div>
   )
 }

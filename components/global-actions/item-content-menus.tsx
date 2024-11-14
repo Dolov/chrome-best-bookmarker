@@ -29,7 +29,10 @@ enum Actions {
   DELETE_DIR = "delete-dir"
 }
 
-const ItemContentMenus: React.FC<{}> = () => {
+const ItemContentMenus: React.FC<{
+  addKeyword: (keyword: string) => void
+}> = (props) => {
+  const { addKeyword } = props
   const menuRef = React.useRef(null)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
@@ -125,10 +128,11 @@ const ItemContentMenus: React.FC<{}> = () => {
 
   const handleAction = (action: (typeof actions)[0]) => {
     const { key } = action
+    const { id, url, originalTitle, children } = contextMenuNode
     if (key === Actions.DELETE) {
       chrome.runtime.sendMessage(
         {
-          id: contextMenuNode.id,
+          id,
           action: Message.REMOVE_BOOKMARK
         },
         () => {
@@ -141,7 +145,7 @@ const ItemContentMenus: React.FC<{}> = () => {
     if (key === Actions.DELETE_DIR) {
       chrome.runtime.sendMessage(
         {
-          id: contextMenuNode.id,
+          id,
           action: Message.REMOVE_BOOKMARK_TREE
         },
         () => {
@@ -152,9 +156,8 @@ const ItemContentMenus: React.FC<{}> = () => {
     }
 
     if (key === Actions.COPY) {
-      const { url, children } = contextMenuNode
       if (url) {
-        copyTextToClipboard(contextMenuNode.url)
+        copyTextToClipboard(url)
       } else {
         const text = getBookmarksToText(children)
         copyTextToClipboard(text)
@@ -163,6 +166,7 @@ const ItemContentMenus: React.FC<{}> = () => {
     }
 
     if (key === Actions.SEARCH) {
+      addKeyword(originalTitle)
       clear()
     }
   }
