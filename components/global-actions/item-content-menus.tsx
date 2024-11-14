@@ -17,6 +17,8 @@ import {
 } from "../icons"
 import { copyTextToClipboard, getBookmarksToText } from "../utils"
 
+const ROOT_IDS = ["0", "1", "2"]
+
 enum Actions {
   COPY = "copy",
   MOVE = "move",
@@ -106,6 +108,11 @@ const ItemContentMenus: React.FC<{}> = () => {
         actions.move,
         actions.delete
       ]
+    }
+
+    // root dir can't be deleted
+    if (ROOT_IDS.includes(id)) {
+      return [actions.rename, actions.search, actions.copy, actions.move]
     }
     return [
       actions.rename,
