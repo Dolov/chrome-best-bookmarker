@@ -212,16 +212,23 @@ export const getBookmarksToText = (children = []) => {
 export const getDirectories = (treeData = [], excludeChildrenNodeId = "") => {
   return treeData.reduce((currentValue, item) => {
     if (!item) return currentValue
+
     const { children = [], url, id } = item
+
+    // 过滤掉含有 url 的节点
     if (url) return currentValue
 
+    // 如果当前节点的 id 匹配排除条件，直接跳过
     if (excludeChildrenNodeId === id) {
       return currentValue
     }
 
-    item.children = getDirectories(children, excludeChildrenNodeId)
+    // 对 children 进行递归操作，确保不修改原始数据
+    const newChildren = getDirectories(children, excludeChildrenNodeId)
 
-    currentValue.push(item)
+    // 创建新的 item 对象，避免修改原始 item
+    currentValue.push({ ...item, children: newChildren })
+
     return currentValue
   }, [])
 }

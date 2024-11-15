@@ -23,14 +23,14 @@ const TreeNodeTitleContainer: React.FC<{
   const { children, node } = props
   const { id, url } = node
 
-  React.useEffect(() => {
-    console.log("init")
-    return () => {
-      console.log("卸载")
-    }
-  }, [])
+  // React.useEffect(() => {
+  //   console.log("init")
+  //   return () => {
+  //     console.log("卸载")
+  //   }
+  // }, [])
 
-  console.log("render")
+  // console.log("render")
 
   const deleteBookmark = () => {
     chrome.runtime.sendMessage(
