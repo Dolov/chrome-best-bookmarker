@@ -6,13 +6,11 @@
   .center {
     @apply flex justify-center items-center;
   }
-}
 
-.text-ellipsis {
-  @apply overflow-hidden whitespace-nowrap;
-  text-overflow: ellipsis;
+  .no-after::after {
+    content: none;
+  }
 }
-
 
 
 .highlight {

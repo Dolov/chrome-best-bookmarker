@@ -225,3 +225,26 @@ export const getDirectories = (treeData = [], excludeChildrenNodeId = "") => {
     return currentValue
   }, [])
 }
+
+export const matchTreeData = (treeData = [], keyword: string) => {
+  return treeData.reduce((currentValue, item) => {
+    const { children = [], title } = item
+    const ltitle = title?.toLowerCase?.() || ""
+    const lkeyword = keyword?.toLowerCase?.() || ""
+
+    // 如果当前项的标题包含关键字，或者它的子树包含匹配项
+    if (
+      ltitle.includes(lkeyword) ||
+      children.some((child) => matchTreeData([child], keyword).length > 0)
+    ) {
+      // 递归匹配子节点，并保留子节点
+      const matchedChildren = matchTreeData(children, keyword)
+      currentValue.push({
+        ...item,
+        children: matchedChildren // 保留匹配的子树
+      })
+    }
+
+    return currentValue
+  }, [])
+}

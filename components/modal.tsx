@@ -1,13 +1,14 @@
 import React, { Fragment } from "react"
 
 const Modal: React.FC<{
+  width?: number | string
   visible: boolean
   onOk?: () => void
   title?: string
   onClose?: () => void
   children: React.ReactNode
 }> = (props) => {
-  const { visible, onClose, onOk, children, title } = props
+  const { visible, onClose, onOk, children, title, width } = props
   const id = React.useMemo(() => "modal_" + Date.now(), [])
 
   React.useEffect(() => {
@@ -37,7 +38,9 @@ const Modal: React.FC<{
 
   return (
     <dialog id={id} className="modal">
-      <div className="modal-box flex flex-col">
+      <div
+        style={{ width, maxWidth: width }}
+        className="modal-box flex flex-col">
         <h3 className="font-bold text-lg pb-4">{title}</h3>
         <div className="flex flex-col flex-1 overflow-auto">{children}</div>
         <div className="modal-action">
