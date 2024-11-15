@@ -10,6 +10,11 @@
   .no-after::after {
     content: none;
   }
+
+  .text-ellipsis {
+    @apply overflow-hidden whitespace-nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 
