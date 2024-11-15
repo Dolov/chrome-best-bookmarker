@@ -3,7 +3,19 @@ import * as React from "react"
 
 import { FileIcon, TinyFolderIcon } from "./icons"
 
-const TreeItem = ({ data, activeId, nodeClassName }) => {
+interface TreeItemProps {
+  data: any
+  activeId?: string
+  nodeClassName?: string
+  handleItemClick?: (data: any, e: React.MouseEvent) => void
+}
+
+const TreeItem: React.FC<TreeItemProps> = ({
+  data,
+  activeId,
+  nodeClassName,
+  handleItemClick = () => {}
+}) => {
   const { id, children = [], url, title } = data
   const active = id === activeId
   const isLeaf = children.length === 0
@@ -16,7 +28,7 @@ const TreeItem = ({ data, activeId, nodeClassName }) => {
           "no-after": isLeaf
         })}>
         <TinyFolderIcon />
-        {title}
+        <div onClick={(e) => handleItemClick(data, e)}>{title}</div>
       </summary>
       <ul>
         {children.map((child) => (
@@ -25,6 +37,7 @@ const TreeItem = ({ data, activeId, nodeClassName }) => {
             data={child}
             activeId={activeId}
             nodeClassName={nodeClassName}
+            handleItemClick={handleItemClick}
           />
         ))}
       </ul>
@@ -35,7 +48,7 @@ const TreeItem = ({ data, activeId, nodeClassName }) => {
     child = (
       <div className={classnames("py-0", { active })}>
         <FileIcon />
-        {title}
+        <div onClick={(e) => handleItemClick(data, e)}>{title}</div>
       </div>
     )
   }
@@ -47,12 +60,14 @@ const Tree = ({
   data,
   className,
   activeId,
-  nodeClassName
+  nodeClassName,
+  handleItemClick
 }: {
   data: any[]
   className?: string
   activeId?: string
   nodeClassName?: string
+  handleItemClick?: (node: any, e: React.MouseEvent) => void
 }) => (
   <ul
     className={classnames(
@@ -65,6 +80,7 @@ const Tree = ({
         data={item}
         activeId={activeId}
         nodeClassName={nodeClassName}
+        handleItemClick={handleItemClick}
       />
     ))}
   </ul>
