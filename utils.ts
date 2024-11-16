@@ -2,7 +2,9 @@ export enum Storage {
   UNION = "UNION",
   SEARCH_TYPE = "SEARCH_TYPE",
   LAST_PARENT_ID = "LAST_PARENT_ID",
-  CASE_SENSITIVE = "CASE_SENSITIVE"
+  CASE_SENSITIVE = "CASE_SENSITIVE",
+
+  SETTINGS = "SETTINGS"
 }
 
 export enum Message {

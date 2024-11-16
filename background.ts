@@ -54,7 +54,7 @@ chrome.action.onClicked.addListener(async (activeTab) => {
       },
       function (response) {
         if (!chrome.runtime.lastError) return
-        chrome.tabs.create({ url: `./tabs/Manage.html` })
+        chrome.tabs.create({ url: `./tabs/manage.html` })
       }
     )
   })

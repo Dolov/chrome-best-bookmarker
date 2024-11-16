@@ -1,0 +1,184 @@
+{
+  "extensionName": {
+    "message": "Best Cookier",
+    "description": ""
+  },
+  "extensionDescription": {
+    "message": "A high-quality cookie manager with stylish design, convenient operation, and rich features.",
+    "description": ""
+  },
+  "notSupportCookie": {
+    "message": "Note: The current website does not support setting cookies!",
+    "description": ""
+  },
+  "settings_theme": {
+    "message": "Theme Setting",
+    "description": ""
+  },
+  "settings_background": {
+    "message": "Background Setting",
+    "description": ""
+  },
+  "settings_followIcon": {
+    "message": "Follow Icon Setting",
+    "description": ""
+  },
+  "settings_cookieGuard": {
+    "message": "Cookie Security Guard",
+    "description": ""
+  },
+  "actions_copy_json": {
+    "message": "Copy JSON",
+    "description": ""
+  },
+  "actions_copy_headerstr": {
+    "message": "Copy Header String",
+    "description": ""
+  },
+  "actions_delete": {
+    "message": "Delete $params$ items",
+    "description": "",
+    "placeholders": {
+      "params": {
+        "content": "$1",
+        "example": ""
+      }
+    }
+  },
+  "actions_monitor": {
+    "message": "Monitor Cookie Changes",
+    "description": ""
+  },
+  "actions_refresh": {
+    "message": "Refresh",
+    "description": ""
+  },
+  "actions_import": {
+    "message": "Import",
+    "description": ""
+  },
+  "actions_export": {
+    "message": "Export $params$ items",
+    "description": "",
+    "placeholders": {
+      "params": {
+        "content": "$1",
+        "example": ""
+      }
+    }
+  },
+  "actions_fullScreen": {
+    "message": "Full Screen",
+    "description": ""
+  },
+  "actions_setting": {
+    "message": "Settings",
+    "description": ""
+  },
+  "actions_guard": {
+    "message": "Cookie Security Guard",
+    "description": ""
+  },
+  "actions_issues": {
+    "message": "Feature Requests & Issue Reporting",
+    "description": ""
+  },
+  "copySuccess": {
+    "message": "Copy successful.",
+    "description": ""
+  },
+  "importSuccess": {
+    "message": "Import successful.",
+    "description": ""
+  },
+  "importFail": {
+    "message": "Import failed.",
+    "description": ""
+  },
+  "deleteSuccess": {
+    "message": "Delete successful.",
+    "description": ""
+  },
+  "delete": {
+    "message": "Delete",
+    "description": ""
+  },
+  "follow": {
+    "message": "Follow",
+    "description": ""
+  },
+  "unFollow": {
+    "message": "Unfollow",
+    "description": ""
+  },
+  "importJsonFile": {
+    "message": "Import JSON File",
+    "description": ""
+  },
+  "pasteJsonData": {
+    "message": "Paste JSON Data",
+    "description": ""
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": ""
+  },
+  "import": {
+    "message": "Import",
+    "description": ""
+  },
+  "filterByName": {
+    "message": "Filter by Name | Regex",
+    "description": ""
+  },
+  "filterByValue": {
+    "message": "Filter by Value | Regex",
+    "description": ""
+  },
+  "filterByPath": {
+    "message": "Filter by Path | Regex",
+    "description": ""
+  },
+  "addNewCookie": {
+    "message": "Add New Cookie",
+    "description": ""
+  },
+  "inputValue": {
+    "message": "Input Value",
+    "description": ""
+  },
+  "monitorEnd": {
+    "message": "Monitoring ended.",
+    "description": ""
+  },
+  "monitorStart": {
+    "message": "Monitoring started. Open the browser console to view.",
+    "description": ""
+  },
+  "allExtensions": {
+    "message": "All Extensions",
+    "description": ""
+  },
+  "ownCookieExtensions": {
+    "message": "Extensions with Cookie Authorization",
+    "description": ""
+  },
+  "disablePluginsOnEntry": {
+    "message": "Disable certain plugins when entering the $params$ site, and reactivate them upon leaving.",
+    "description": "",
+    "placeholders": {
+      "params": {
+        "content": "$1",
+        "example": ""
+      }
+    }
+  },
+  "experimentalFeatureNotice": {
+    "message": "This is an experimental feature in testing. Click the button on the right to activate it. We are working hard to optimize it for a better experience.",
+    "description": ""
+  },
+  "feedbackImportant": {
+    "message": "Your feedback is very important to us. Please feel free to share your thoughts and suggestions!",
+    "description": ""
+  }
+}

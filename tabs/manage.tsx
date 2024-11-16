@@ -21,6 +21,7 @@ import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
 import type { SearchInputRefProps } from "~components/search-input"
+import { useThemeChange } from "~hooks/useSetting"
 
 import "~/tailwindcss.css"
 
@@ -84,7 +85,7 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
               className="flex-1"
               onChange={debounceOnChange}
               onPressEnter={init}
-              prefix={<WhhSearchfolder className="text-neutral opacity-70" />}
+              prefix={<WhhSearchfolder className="opacity-70" />}
               suffix={
                 <div className="actions flex">
                   <Case />
@@ -120,6 +121,8 @@ export default () => {
     x: number
     y: number
   }>(null)
+
+  useThemeChange()
 
   React.useEffect(() => {
     init()

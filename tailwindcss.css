@@ -15,6 +15,15 @@
     @apply overflow-hidden whitespace-nowrap;
     text-overflow: ellipsis;
   }
+
+  .item-border {
+    @apply border border-base-content/20 outline outline-2 outline-offset-2 outline-transparent hover:border-base-content/40;
+  }
+
+  .item-border-active {
+    @apply !outline-base-content;
+  }
+
 }
 
 
