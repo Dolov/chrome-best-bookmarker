@@ -255,3 +255,50 @@ export const matchTreeData = (treeData = [], keyword: string) => {
     return currentValue
   }, [])
 }
+
+const getBookmarkAsHtml = (
+  children: BookmarkProps[],
+  parentTitle = "",
+  level = 1
+) => {
+  const n = level > 6 ? 6 : level
+  let html = ""
+
+  // 生成顶级标题
+  if (parentTitle) {
+    html += `<H${n}>${parentTitle}</H${n}>\n`
+  }
+
+  html += `<DL><p>\n` // 使用 <DL> 标签来表示书签列表
+
+  children.forEach((child) => {
+    // 如果书签有 URL，生成一个 <DT> 和 <A> 标签
+    if (child.url) {
+      const addDate = Math.floor(Date.now() / 1000) // 当前时间戳
+      html += `<DT><A HREF="${child.url}" ADD_DATE="${addDate}" LAST_MODIFIED="${addDate}">${child.originalTitle}</A>\n`
+      return
+    }
+
+    // 如果书签有子项，递归调用该函数
+    if (child.children) {
+      html += getBookmarkAsHtml(child.children, child.originalTitle, level + 1)
+    }
+  })
+
+  html += `</DL><p>\n` // 关闭 <DL> 标签
+  return html
+}
+
+export const downloadBookmarkAsHtml = (
+  children: BookmarkProps[],
+  title = "书签"
+) => {
+  const downloadLink = document.createElement("a")
+  const html = getBookmarkAsHtml(children)
+  downloadLink.setAttribute(
+    "href",
+    "data:text/html;charset=utf-8," + encodeURIComponent(html)
+  )
+  downloadLink.setAttribute("download", `${title}.html`)
+  downloadLink.click()
+}

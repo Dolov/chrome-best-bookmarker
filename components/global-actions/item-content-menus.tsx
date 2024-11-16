@@ -10,12 +10,18 @@ import {
   MaterialSymbolsContentCopyRounded,
   MaterialSymbolsDelete,
   MaterialSymbolsDriveFileMoveRounded,
+  MdiCheckboxMultipleBlankCircleOutline,
+  MdiCheckboxMultipleMarkedCircle,
   MdiRename,
   MingcuteSearch2Fill,
   RiDownloadCloud2Fill,
   TinyFolderIcon
 } from "../icons"
-import { copyTextToClipboard, getBookmarksToText } from "../utils"
+import {
+  copyTextToClipboard,
+  downloadBookmarkAsHtml,
+  getBookmarksToText
+} from "../utils"
 import type { BookmarkProps } from "../utils"
 
 const ROOT_IDS = ["0", "1", "2"]
@@ -28,7 +34,9 @@ enum Actions {
   DELETE = "delete",
   DOWNLOAD = "download",
   DELETE_DIR = "delete-dir",
-  NEW_FOLDER = "new-folder"
+  NEW_FOLDER = "new-folder",
+  CHECKBOX = "checkbox",
+  UNCHECKBOX = "uncheckbox"
 }
 
 const ItemContentMenus: React.FC<{
@@ -42,7 +50,7 @@ const ItemContentMenus: React.FC<{
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
 
-  const { contextMenuNode, contextMenuPosition } = globalState
+  const { contextMenuNode, checkboxVisible, contextMenuPosition } = globalState
 
   const clear = () => {
     globalActions.setContextMenuNode(null)
@@ -110,13 +118,31 @@ const ItemContentMenus: React.FC<{
         title: "新建文件夹",
         Icon: FluentFolderAdd24Filled,
         key: Actions.NEW_FOLDER
+      },
+      download: {
+        title: "下载",
+        Icon: RiDownloadCloud2Fill,
+        key: Actions.DOWNLOAD
+      },
+      checkbox: {
+        title: "多选",
+        Icon: MdiCheckboxMultipleMarkedCircle,
+        key: Actions.CHECKBOX
+      },
+      uncheckbox: {
+        title: "取消多选",
+        Icon: MdiCheckboxMultipleBlankCircleOutline,
+        key: Actions.UNCHECKBOX
       }
     }
+
+    const checkbox = checkboxVisible ? actions.uncheckbox : actions.checkbox
 
     if (url) {
       return [
         actions.rename,
         actions.search,
+        checkbox,
         actions.copy,
         actions.move,
         actions.delete
@@ -125,17 +151,19 @@ const ItemContentMenus: React.FC<{
 
     // root dir can't be deleted
     if (ROOT_IDS.includes(id)) {
-      return [actions.copy, actions.move, actions.newFolder]
+      return [actions.copy, actions.move, actions.download, actions.newFolder]
     }
     return [
       actions.rename,
-      actions.search,
       actions.newFolder,
+      actions.search,
+      checkbox,
+      actions.download,
       actions.copy,
       actions.move,
       actions.deleteDir
     ]
-  }, [contextMenuNode])
+  }, [contextMenuNode, checkboxVisible])
 
   const handleAction = (action: (typeof actions)[0]) => {
     const { key } = action
@@ -193,6 +221,21 @@ const ItemContentMenus: React.FC<{
 
     if (key === Actions.NEW_FOLDER) {
       handleNewFolder(contextMenuNode)
+      clear()
+    }
+
+    if (key === Actions.DOWNLOAD) {
+      downloadBookmarkAsHtml(children, originalTitle)
+      clear()
+    }
+
+    if (key === Actions.CHECKBOX) {
+      globalActions.setCheckboxVisible(true)
+      clear()
+    }
+
+    if (key === Actions.UNCHECKBOX) {
+      globalActions.setCheckboxVisible(false)
       clear()
     }
   }

@@ -7,7 +7,6 @@ import FileTree from "~/components/tree"
 import {
   formattedTreeNodesTitle,
   formatTreeNodes,
-  getDirectories,
   matchSearch,
   MatchTypeEnum
 } from "~/components/utils"
@@ -30,13 +29,20 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
 ) => {
   const { init, dataSource } = props
   const searchInputRef = React.useRef<SearchInputRefProps>(null)
-  const [keywords, setKeywords] = React.useState<string[]>([])
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
   const [searchType] = useStorage(Storage.SEARCH_TYPE, MatchTypeEnum.MIXIN)
+  const [keywords, setKeywords] = React.useState<string[]>([])
+  const [selectedIds, setSelectedIds] = React.useState([])
 
   const globalState = React.useContext(GlobalStateContext)
-  const { contextMenuNode } = globalState
+  const { contextMenuNode, checkboxVisible } = globalState
+
+  React.useEffect(() => {
+    if (!checkboxVisible) {
+      setSelectedIds([])
+    }
+  }, [checkboxVisible])
 
   const onChange = (words: string[]) => {
     if (words.join() === keywords.join()) return
@@ -91,7 +97,13 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
         </div>
         <div className="flex-1 rounded-lg overflow-auto mb-2 px-4">
           {visible && (
-            <FileTree data={matchedNodes} activeId={contextMenuNode?.id} />
+            <FileTree
+              data={matchedNodes}
+              checkbox={checkboxVisible}
+              activeId={contextMenuNode?.id}
+              selectedIds={selectedIds}
+              onCheckboxChange={setSelectedIds}
+            />
           )}
         </div>
       </div>
@@ -101,6 +113,7 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
 
 export default () => {
   const [dataSource, setDataSource] = React.useState([])
+  const [checkboxVisible, setCheckboxVisible] = React.useState(false)
   const [contextMenuNode, setContextMenuNode] =
     React.useState<BookmarkProps>(null)
   const [contextMenuPosition, setContextMenuPosition] = React.useState<{
@@ -128,15 +141,17 @@ export default () => {
     return {
       dataSource,
       contextMenuNode,
+      checkboxVisible,
       contextMenuPosition
     }
-  }, [contextMenuNode, contextMenuPosition])
+  }, [dataSource, contextMenuNode, checkboxVisible, contextMenuPosition])
 
   const functionValues = React.useMemo(() => {
     return {
-      refresh: init,
+      setCheckboxVisible,
       setContextMenuNode,
-      setContextMenuPosition
+      setContextMenuPosition,
+      refresh: init
     }
   }, [])
 

@@ -6,29 +6,55 @@ import { FileIcon, TinyFolderIcon } from "./icons"
 interface TreeItemProps {
   data: any
   activeId?: string
+  checkbox?: boolean
   nodeClassName?: string
   handleItemClick?: (data: any, e: React.MouseEvent) => void
+  selectedIds?: string[]
+  onCheckboxChange?: (selectedIds: string[]) => void
 }
 
 const TreeItem: React.FC<TreeItemProps> = ({
   data,
   activeId,
+  checkbox,
   nodeClassName,
-  handleItemClick = () => {}
+  handleItemClick = () => {},
+  selectedIds = [],
+  onCheckboxChange = () => {}
 }) => {
   const { id, children = [], url, title } = data
   const active = id === activeId
   const isLeaf = children.length === 0
+  const checked = selectedIds.includes(id)
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target
+    onCheckboxChange(
+      checked
+        ? [...selectedIds, id]
+        : selectedIds.filter((selectedId) => selectedId !== id)
+    )
+  }
 
   let child = (
     <details open>
       <summary
-        className={classnames("py-0", nodeClassName, {
+        className={classnames("py-0", "flex", nodeClassName, {
           active,
           "no-after": isLeaf
         })}>
+        {checkbox && (
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={handleCheckboxChange}
+            className="checkbox checkbox-accent checkbox-xs"
+          />
+        )}
         <TinyFolderIcon />
-        <div onClick={(e) => handleItemClick(data, e)}>{title}</div>
+        <div className="flex-1" onClick={(e) => handleItemClick(data, e)}>
+          {title}
+        </div>
       </summary>
       <ul>
         {children.map((child) => (
@@ -36,8 +62,11 @@ const TreeItem: React.FC<TreeItemProps> = ({
             key={child.id}
             data={child}
             activeId={activeId}
+            checkbox={checkbox}
             nodeClassName={nodeClassName}
             handleItemClick={handleItemClick}
+            selectedIds={selectedIds}
+            onCheckboxChange={onCheckboxChange}
           />
         ))}
       </ul>
@@ -46,9 +75,19 @@ const TreeItem: React.FC<TreeItemProps> = ({
 
   if (url) {
     child = (
-      <div className={classnames("py-0", { active })}>
+      <div className={classnames("py-0", "flex", { active })}>
+        {checkbox && (
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={handleCheckboxChange}
+            className="checkbox checkbox-secondary checkbox-xs"
+          />
+        )}
         <FileIcon />
-        <div onClick={(e) => handleItemClick(data, e)}>{title}</div>
+        <div className="flex-1" onClick={(e) => handleItemClick(data, e)}>
+          {title}
+        </div>
       </div>
     )
   }
@@ -61,13 +100,19 @@ const Tree = ({
   className,
   activeId,
   nodeClassName,
-  handleItemClick
+  handleItemClick,
+  checkbox,
+  selectedIds,
+  onCheckboxChange
 }: {
   data: any[]
-  className?: string
   activeId?: string
+  checkbox?: boolean
+  className?: string
   nodeClassName?: string
   handleItemClick?: (node: any, e: React.MouseEvent) => void
+  selectedIds?: string[]
+  onCheckboxChange?: (selectedIds: string[]) => void
 }) => (
   <ul
     className={classnames(
@@ -79,8 +124,11 @@ const Tree = ({
         key={item.id}
         data={item}
         activeId={activeId}
+        checkbox={checkbox}
         nodeClassName={nodeClassName}
         handleItemClick={handleItemClick}
+        selectedIds={selectedIds}
+        onCheckboxChange={onCheckboxChange}
       />
     ))}
   </ul>
