@@ -33,8 +33,9 @@ enum Actions {
 const ItemContentMenus: React.FC<{
   addKeyword: (keyword: string) => void
   handleMove: (node: BookmarkProps) => void
+  handleEdit: (node: BookmarkProps) => void
 }> = (props) => {
-  const { addKeyword, handleMove } = props
+  const { addKeyword, handleMove, handleEdit } = props
   const menuRef = React.useRef(null)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
@@ -174,6 +175,11 @@ const ItemContentMenus: React.FC<{
 
     if (key === Actions.MOVE) {
       handleMove(contextMenuNode)
+      clear()
+    }
+
+    if (key === Actions.RENAME) {
+      handleEdit(contextMenuNode)
       clear()
     }
   }
