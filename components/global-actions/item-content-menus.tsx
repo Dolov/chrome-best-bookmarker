@@ -27,15 +27,17 @@ enum Actions {
   SEARCH = "search",
   DELETE = "delete",
   DOWNLOAD = "download",
-  DELETE_DIR = "delete-dir"
+  DELETE_DIR = "delete-dir",
+  NEW_FOLDER = "new-folder"
 }
 
 const ItemContentMenus: React.FC<{
   addKeyword: (keyword: string) => void
   handleMove: (node: BookmarkProps) => void
   handleEdit: (node: BookmarkProps) => void
+  handleNewFolder: (node: BookmarkProps) => void
 }> = (props) => {
-  const { addKeyword, handleMove, handleEdit } = props
+  const { addKeyword, handleMove, handleEdit, handleNewFolder } = props
   const menuRef = React.useRef(null)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
@@ -103,6 +105,11 @@ const ItemContentMenus: React.FC<{
         Icon: MaterialSymbolsDelete,
         key: Actions.DELETE_DIR,
         className: "text-error font-bold"
+      },
+      newFolder: {
+        title: "新建文件夹",
+        Icon: FluentFolderAdd24Filled,
+        key: Actions.NEW_FOLDER
       }
     }
 
@@ -118,11 +125,12 @@ const ItemContentMenus: React.FC<{
 
     // root dir can't be deleted
     if (ROOT_IDS.includes(id)) {
-      return [actions.rename, actions.search, actions.copy, actions.move]
+      return [actions.copy, actions.move, actions.newFolder]
     }
     return [
       actions.rename,
       actions.search,
+      actions.newFolder,
       actions.copy,
       actions.move,
       actions.deleteDir
@@ -180,6 +188,11 @@ const ItemContentMenus: React.FC<{
 
     if (key === Actions.RENAME) {
       handleEdit(contextMenuNode)
+      clear()
+    }
+
+    if (key === Actions.NEW_FOLDER) {
+      handleNewFolder(contextMenuNode)
       clear()
     }
   }
