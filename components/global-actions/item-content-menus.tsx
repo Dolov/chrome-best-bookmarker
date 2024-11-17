@@ -72,7 +72,15 @@ const ItemContentMenus: React.FC<{
     return () => document.removeEventListener("click", handleClickOutside)
   }, [contextMenuNode])
 
-  const actionGroups = React.useMemo(() => {
+  const actionGroups: {
+    group: string
+    actions: {
+      key: string
+      Icon: React.ElementType
+      title: string
+      className?: string
+    }[]
+  }[] = React.useMemo(() => {
     if (!contextMenuNode) return []
     const { id, url } = contextMenuNode
 
@@ -136,15 +144,15 @@ const ItemContentMenus: React.FC<{
     if (url) {
       return [
         {
-          key: "operations",
+          group: "operations",
           actions: [actions.eidt, actions.move]
         },
         {
-          key: "searchAndSelection",
+          group: "searchAndSelection",
           actions: [actions.search, checkbox, actions.copy]
         },
         {
-          group: "delete",
+          group: "danger",
           actions: [actions.delete]
         }
       ]
@@ -154,11 +162,11 @@ const ItemContentMenus: React.FC<{
     if (ROOT_IDS.includes(id)) {
       return [
         {
-          key: "operations",
+          group: "operations",
           actions: [actions.copy, actions.download]
         },
         {
-          key: "management",
+          group: "management",
           actions: [actions.move, actions.newFolder]
         }
       ]
@@ -178,7 +186,7 @@ const ItemContentMenus: React.FC<{
       },
 
       {
-        group: "delete",
+        group: "danger",
         actions: [actions.deleteDir]
       }
     ]
@@ -233,7 +241,7 @@ const ItemContentMenus: React.FC<{
       clear()
     }
 
-    if (key === Actions.RENAME) {
+    if (key === Actions.EDIT) {
       handleEdit(contextMenuNode)
       clear()
     }
@@ -280,9 +288,9 @@ const ItemContentMenus: React.FC<{
         <div className="divider m-0" />
         {actionGroups.map((group, index) => {
           const isLastGroup = index === actionGroups.length - 1
-          const { key, actions } = group
+          const { group: groupName, actions } = group
           return (
-            <div key={key}>
+            <div key={groupName}>
               {actions.map((action) => {
                 const { key, title, Icon, className } = action
                 return (

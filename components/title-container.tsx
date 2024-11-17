@@ -44,13 +44,42 @@ const TreeNodeTitleContainer: React.FC<{
     )
   }
 
-  const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault()
+  const onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+
+    // 获取鼠标点击的 Y 坐标
+    const mouseY = event.clientY
+    const mouseX = event.clientX
+
+    // 获取页面的总高度和窗口的可视高度
+    const pageHeight = document.documentElement.scrollHeight
+
+    // 计算鼠标下方和上方的剩余空间
+    const spaceBelow = pageHeight - mouseY // 鼠标下方的空间
+    const spaceAbove = mouseY // 鼠标上方的空间
+
+    // 假设菜单的高度
+    const menuHeight = url ? 316 : 404 // 你可以根据实际菜单高度动态调整
+
+    // 默认菜单位置是鼠标点击位置
+    let newMenuPosition = { x: mouseX, y: mouseY }
+
+    // 判断是否有足够的空间显示菜单
+    if (spaceBelow >= menuHeight) {
+      // 如果下方有足够的空间，显示在鼠标下方
+      newMenuPosition.y = mouseY
+    } else if (spaceAbove >= menuHeight) {
+      // 如果下方没有足够的空间，上方有足够的空间，显示在鼠标上方
+      newMenuPosition.y = mouseY - menuHeight
+    } else {
+      // 如果上下都没有足够的空间，这里可以选择显示在某个固定位置或其他逻辑
+      // 例如，显示在页面中间或其他位置
+      newMenuPosition.y = Math.max(0, pageHeight - menuHeight)
+    }
+
+    // 更新上下文菜单的显示位置
     globalActions.setContextMenuNode(node)
-    globalActions.setContextMenuPosition({
-      x: e.clientX,
-      y: e.clientY
-    })
+    globalActions.setContextMenuPosition(newMenuPosition)
   }
 
   return (
