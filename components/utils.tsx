@@ -303,20 +303,29 @@ export const downloadBookmarkAsHtml = (
   downloadLink.click()
 }
 
-export async function isUrlAccessible(url: string) {
+export async function isUrlAccessible(url: string): Promise<boolean> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 500)
+
   try {
     const response = await fetch(url, {
       method: "HEAD",
-      cache: "no-cache"
+      cache: "no-cache",
+      signal: controller.signal // 将AbortController信号传递给fetch请求
     })
 
     if (response.ok) {
-      return true
-    } else {
-      return false
+      return true // 如果响应成功，返回true
     }
+    return false // 如果响应失败，返回false
   } catch (error) {
-    return false
+    // 处理fetch请求的超时错误
+    if (error.name === "AbortError") {
+      console.log("Request timed out")
+    }
+    return false // 如果发生错误（包括超时），返回false
+  } finally {
+    clearTimeout(timeoutId) // 清除定时器
   }
 }
 

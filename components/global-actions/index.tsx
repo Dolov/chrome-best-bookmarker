@@ -1,6 +1,7 @@
 import React, { Fragment } from "react"
 
 import type { BookmarkProps } from "../utils"
+import DetectAlert from "./detect-alert"
 import EditAction from "./edit-action"
 import FloatButton from "./float-button"
 import ItemContentMenus from "./item-content-menus"
@@ -34,6 +35,7 @@ const GlobalActions: React.FC<{
   return (
     <Fragment>
       <FloatButton />
+      <DetectAlert />
       <MoveAction
         node={node}
         onClose={() => setMoveVisible(false)}

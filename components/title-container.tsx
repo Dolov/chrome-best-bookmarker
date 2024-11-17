@@ -24,12 +24,17 @@ const TreeNodeTitle: React.FC<{
   children: React.ReactNode
 }> = (props) => {
   const { node, children } = props
+  const elementId = `bookmark-${node.id}`
   const globalActions = React.useContext(GlobalActionContext)
   const accessibleDetectInfo = React.useContext(AccessibleDetectContext)
-  const { index: detectingIndex, currentNode: currentDetectNode } =
-    accessibleDetectInfo
+  const {
+    failIds,
+    index: detectingIndex,
+    currentNode: currentDetectNode
+  } = accessibleDetectInfo
 
   const { id, url } = node
+  const inaccessible = failIds.includes(id)
   const detecting = currentDetectNode?.id === id
   const progressType = progressTypes[detectingIndex % progressTypes.length]
 
@@ -94,10 +99,15 @@ const TreeNodeTitle: React.FC<{
 
   return (
     <div
-      data-id={id}
+      data-id={elementId}
       onContextMenu={onContextMenu}
       className="h-full w-full flex items-center group relative">
-      <span className="flex-1">{children}</span>
+      <span
+        className={classnames("flex-1", {
+          "line-through": inaccessible
+        })}>
+        {children}
+      </span>
       {url && (
         <button
           onClick={deleteBookmark}
@@ -108,7 +118,7 @@ const TreeNodeTitle: React.FC<{
       {url && detecting && (
         <progress
           className={classnames(
-            "progress w-full h-[1px] absolute bottom-0 left-0",
+            "progress w-full h-[2px] absolute bottom-0 left-0",
             progressType
           )}
         />
