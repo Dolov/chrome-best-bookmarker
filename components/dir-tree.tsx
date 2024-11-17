@@ -28,7 +28,7 @@ const DirTree: React.FC<{
     <Tree
       data={treeData}
       activeId={activeId}
-      nodeClassName="py-1"
+      nodeClassName="h-[24px]"
       handleItemClick={handleClickItem}
     />
   )

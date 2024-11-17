@@ -83,7 +83,9 @@ const TreeNodeTitleContainer: React.FC<{
   }
 
   return (
-    <div onContextMenu={onContextMenu} className="flex items-center group py-1">
+    <div
+      onContextMenu={onContextMenu}
+      className="h-full w-full flex items-center group">
       <span className="flex-1">{children}</span>
       {url && (
         <button

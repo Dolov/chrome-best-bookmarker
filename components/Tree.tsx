@@ -52,7 +52,9 @@ const TreeItem: React.FC<TreeItemProps> = ({
           />
         )}
         <TinyFolderIcon />
-        <div className="flex-1" onClick={(e) => handleItemClick(data, e)}>
+        <div
+          className="flex-1 flex items-center h-full"
+          onClick={(e) => handleItemClick(data, e)}>
           {title}
         </div>
       </summary>
@@ -75,7 +77,10 @@ const TreeItem: React.FC<TreeItemProps> = ({
 
   if (url) {
     child = (
-      <div className={classnames("py-0", "flex", { active })}>
+      <div
+        className={classnames("py-0", "flex", nodeClassName, {
+          active
+        })}>
         {checkbox && (
           <input
             type="checkbox"
@@ -85,7 +90,9 @@ const TreeItem: React.FC<TreeItemProps> = ({
           />
         )}
         <FileIcon />
-        <div className="flex-1" onClick={(e) => handleItemClick(data, e)}>
+        <div
+          className="flex-1 flex items-center h-full"
+          onClick={(e) => handleItemClick(data, e)}>
           {title}
         </div>
       </div>

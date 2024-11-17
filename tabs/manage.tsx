@@ -103,6 +103,7 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
               checkbox={checkboxVisible}
               activeId={contextMenuNode?.id}
               selectedIds={selectedIds}
+              nodeClassName="h-[24px]"
               onCheckboxChange={setSelectedIds}
             />
           )}
