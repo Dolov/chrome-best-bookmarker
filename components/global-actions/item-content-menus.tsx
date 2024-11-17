@@ -72,12 +72,7 @@ const ItemContentMenus: React.FC<{
     return () => document.removeEventListener("click", handleClickOutside)
   }, [contextMenuNode])
 
-  const actions: {
-    key: string
-    Icon: React.FC<React.SVGProps<SVGSVGElement>>
-    title: string
-    className?: string
-  }[] = React.useMemo(() => {
+  const actionGroups = React.useMemo(() => {
     if (!contextMenuNode) return []
     const { id, url } = contextMenuNode
 
@@ -140,32 +135,51 @@ const ItemContentMenus: React.FC<{
 
     if (url) {
       return [
-        actions.rename,
-        actions.search,
-        checkbox,
-        actions.copy,
-        actions.move,
-        actions.delete
+        {
+          key: "fileOperations",
+          actions: [actions.rename, actions.copy, actions.delete]
+        },
+        {
+          key: "searchAndSelection",
+          actions: [actions.search, checkbox]
+        },
+        {
+          key: "folderManagement",
+          actions: [actions.move]
+        }
       ]
     }
 
     // root dir can't be deleted
     if (ROOT_IDS.includes(id)) {
-      return [actions.copy, actions.move, actions.download, actions.newFolder]
+      return [
+        {
+          key: "fileOperations",
+          actions: [actions.copy, actions.download]
+        },
+        {
+          key: "folderManagement",
+          actions: [actions.move, actions.newFolder]
+        }
+      ]
     }
     return [
-      actions.rename,
-      actions.newFolder,
-      actions.search,
-      checkbox,
-      actions.download,
-      actions.copy,
-      actions.move,
-      actions.deleteDir
+      {
+        group: "folderManagement",
+        actions: [actions.rename, actions.newFolder, actions.move]
+      },
+      {
+        group: "fileOperations",
+        actions: [actions.download, actions.copy, actions.deleteDir]
+      },
+      {
+        group: "searchAndSelection",
+        actions: [actions.search, checkbox]
+      }
     ]
   }, [contextMenuNode, checkboxVisible])
 
-  const handleAction = (action: (typeof actions)[0]) => {
+  const handleAction = (action) => {
     const { key } = action
     const { id, url, originalTitle, children } = contextMenuNode
     if (key === Actions.DELETE) {
@@ -258,18 +272,28 @@ const ItemContentMenus: React.FC<{
             <span className="ml-2 flex-1 text-ellipsis">{title}</span>
           </p>
         </li>
-        {actions.map((action) => {
-          const { key, title, Icon, className } = action
+        <div className="divider m-0" />
+        {actionGroups.map((group, index) => {
+          const isLastGroup = index === actionGroups.length - 1
+          const { key, actions } = group
           return (
-            <li
-              key={key}
-              className={className}
-              onClick={() => handleAction(action)}>
-              <a>
-                <Icon className="text-lg" />
-                {title}
-              </a>
-            </li>
+            <div key={key}>
+              {actions.map((action) => {
+                const { key, title, Icon, className } = action
+                return (
+                  <li
+                    key={key}
+                    className={className}
+                    onClick={() => handleAction(action)}>
+                    <a>
+                      <Icon className="text-lg" />
+                      {title}
+                    </a>
+                  </li>
+                )
+              })}
+              {!isLastGroup && <div className="divider m-0" />}
+            </div>
           )
         })}
       </ul>
