@@ -13,6 +13,7 @@ import {
   MdiCheckboxMultipleBlankCircleOutline,
   MdiCheckboxMultipleMarkedCircle,
   MdiRename,
+  MingcuteGroup2Fill,
   MingcuteSearch2Fill,
   RiDownloadCloud2Fill,
   TinyFolderIcon
@@ -36,7 +37,8 @@ enum Actions {
   DELETE_DIR = "delete-dir",
   NEW_FOLDER = "new-folder",
   CHECKBOX = "checkbox",
-  UNCHECKBOX = "uncheckbox"
+  UNCHECKBOX = "uncheckbox",
+  SHARE = "share"
 }
 
 const ItemContentMenus: React.FC<{
@@ -136,6 +138,12 @@ const ItemContentMenus: React.FC<{
         title: "取消多选",
         Icon: MdiCheckboxMultipleBlankCircleOutline,
         key: Actions.UNCHECKBOX
+      },
+      share: {
+        title: "分享到圈子",
+        Icon: MingcuteGroup2Fill,
+        key: Actions.SHARE,
+        className: "text-accent"
       }
     }
 
@@ -150,6 +158,10 @@ const ItemContentMenus: React.FC<{
         {
           group: "searchAndSelection",
           actions: [actions.search, checkbox, actions.copy]
+        },
+        {
+          group: "social",
+          actions: [actions.share]
         },
         {
           group: "danger",

@@ -59,7 +59,7 @@ const TreeNodeTitleContainer: React.FC<{
     const spaceAbove = mouseY // 鼠标上方的空间
 
     // 假设菜单的高度
-    const menuHeight = url ? 316 : 404 // 你可以根据实际菜单高度动态调整
+    const menuHeight = url ? 368 : 404 // 你可以根据实际菜单高度动态调整
 
     // 默认菜单位置是鼠标点击位置
     let newMenuPosition = { x: mouseX, y: mouseY }
