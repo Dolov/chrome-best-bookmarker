@@ -2,7 +2,7 @@ import React, { Fragment } from "react"
 
 import { Message } from "~/utils"
 
-import { GlobalActionContext } from "../global-provider"
+import { GlobalActionContext } from "../context/global-provider"
 import Modal from "../modal"
 import type { BookmarkProps } from "../utils"
 

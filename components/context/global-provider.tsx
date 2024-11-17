@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import type { BookmarkProps } from "./utils"
+import type { BookmarkProps } from "../utils"
 
 export const GlobalActionContext = React.createContext<{
   setContextMenuNode(node: BookmarkProps): void

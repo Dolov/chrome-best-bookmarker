@@ -2,7 +2,10 @@ import React, { Fragment } from "react"
 
 import { Message } from "~/utils"
 
-import { GlobalActionContext, GlobalStateContext } from "../global-provider"
+import {
+  GlobalActionContext,
+  GlobalStateContext
+} from "../context/global-provider"
 import {
   FileIcon,
   FluentFolderAdd24Filled,

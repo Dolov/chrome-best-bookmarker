@@ -12,11 +12,12 @@ import {
 } from "~/components/utils"
 import type { BookmarkProps } from "~/components/utils"
 import { Message, Storage } from "~/utils"
-import GlobalActions from "~components/global-actions"
+import { AccessibleDetectContext } from "~components/context/accessible-detect-provider"
 import {
   GlobalActionContext,
   GlobalStateContext
-} from "~components/global-provider"
+} from "~components/context/global-provider"
+import GlobalActions from "~components/global-actions"
 import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
@@ -114,10 +115,18 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
 }
 
 export default () => {
+  useThemeChange()
   const [settings] = useStorage(Storage.SETTINGS, {
     checkbox: true
   })
   const [dataSource, setDataSource] = React.useState([])
+  const [accessibleDetectInfo, setAccessibleDetectInfo] = React.useState({
+    index: 0,
+    failIds: [],
+    successIds: [],
+    currentNode: null
+  })
+
   const [checkboxVisible, setCheckboxVisible] = React.useState(
     settings.checkbox
   )
@@ -127,8 +136,6 @@ export default () => {
     x: number
     y: number
   }>(null)
-
-  useThemeChange()
 
   React.useEffect(() => {
     init()
@@ -146,7 +153,23 @@ export default () => {
     )
   }
 
-  const stateValues = React.useMemo(() => {
+  const handleAccessibleDetectInfo = (info) => {
+    setAccessibleDetectInfo((prevState) => {
+      return {
+        ...prevState,
+        ...info
+      }
+    })
+  }
+
+  const detectState = React.useMemo(() => {
+    return {
+      ...accessibleDetectInfo,
+      setAccessibleDetectInfo: handleAccessibleDetectInfo
+    }
+  }, [accessibleDetectInfo])
+
+  const globalState = React.useMemo(() => {
     return {
       dataSource,
       contextMenuNode,
@@ -155,7 +178,7 @@ export default () => {
     }
   }, [dataSource, contextMenuNode, checkboxVisible, contextMenuPosition])
 
-  const functionValues = React.useMemo(() => {
+  const globalActions = React.useMemo(() => {
     return {
       setCheckboxVisible,
       setContextMenuNode,
@@ -165,10 +188,12 @@ export default () => {
   }, [])
 
   return (
-    <GlobalActionContext.Provider value={functionValues}>
-      <GlobalStateContext.Provider value={stateValues}>
-        <Manage dataSource={dataSource} init={init} />
-      </GlobalStateContext.Provider>
+    <GlobalActionContext.Provider value={globalActions}>
+      <AccessibleDetectContext.Provider value={detectState}>
+        <GlobalStateContext.Provider value={globalState}>
+          <Manage dataSource={dataSource} init={init} />
+        </GlobalStateContext.Provider>
+      </AccessibleDetectContext.Provider>
     </GlobalActionContext.Provider>
   )
 }

@@ -303,6 +303,23 @@ export const downloadBookmarkAsHtml = (
   downloadLink.click()
 }
 
+export async function isUrlAccessible(url: string) {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      cache: "no-cache"
+    })
+
+    if (response.ok) {
+      return true
+    } else {
+      return false
+    }
+  } catch (error) {
+    return false
+  }
+}
+
 export const themes = [
   "light",
   "dark",

@@ -41,8 +41,7 @@ const Bubble: React.FC<BubbleProps> = (props) => {
     subSize = 50,
     subRadius = 80,
     onMouseEnter: onMouseEnterProp,
-    onMouseLeave: onMouseLeaveProp,
-    ...otherProps
+    onMouseLeave: onMouseLeaveProp
   } = props
   const [subVisible, setSubVisible] = useControllableValue(props, {
     trigger: "onSubVisibleChange",
@@ -96,7 +95,6 @@ const Bubble: React.FC<BubbleProps> = (props) => {
 
   const bubble = (
     <div
-      {...otherProps}
       style={mergeStyle}
       onClick={clickHandler}
       onMouseEnter={onMouseEnter}

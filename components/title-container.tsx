@@ -1,27 +1,37 @@
+import classnames from "classnames"
 import React from "react"
 
-import { GlobalActionContext } from "~/components/global-provider"
 import { Message } from "~/utils"
+import { AccessibleDetectContext } from "~components/context/accessible-detect-provider"
+import { GlobalActionContext } from "~components/context/global-provider"
 
-import {
-  FluentFolderAdd24Filled,
-  MaterialSymbolsBookmarkRemove,
-  MaterialSymbolsContentCopyRounded,
-  MaterialSymbolsDelete,
-  MaterialSymbolsDriveFileMoveRounded,
-  MdiRename,
-  MingcuteSearch2Fill,
-  RiDownloadCloud2Fill
-} from "./icons"
+import { MaterialSymbolsBookmarkRemove } from "./icons"
 import type { BookmarkProps } from "./utils"
 
-const TreeNodeTitleContainer: React.FC<{
+const progressTypes = [
+  "progress",
+  "progress-primary",
+  "progress-secondary",
+  "progress-accent",
+  "progress-info",
+  "progress-success",
+  "progress-warning",
+  "progress-error"
+]
+
+const TreeNodeTitle: React.FC<{
   node: BookmarkProps
   children: React.ReactNode
 }> = (props) => {
+  const { node, children } = props
   const globalActions = React.useContext(GlobalActionContext)
-  const { children, node } = props
+  const accessibleDetectInfo = React.useContext(AccessibleDetectContext)
+  const { index: detectingIndex, currentNode: currentDetectNode } =
+    accessibleDetectInfo
+
   const { id, url } = node
+  const detecting = currentDetectNode?.id === id
+  const progressType = progressTypes[detectingIndex % progressTypes.length]
 
   // React.useEffect(() => {
   //   console.log("init")
@@ -84,8 +94,9 @@ const TreeNodeTitleContainer: React.FC<{
 
   return (
     <div
+      data-id={id}
       onContextMenu={onContextMenu}
-      className="h-full w-full flex items-center group">
+      className="h-full w-full flex items-center group relative">
       <span className="flex-1">{children}</span>
       {url && (
         <button
@@ -94,14 +105,24 @@ const TreeNodeTitleContainer: React.FC<{
           <MaterialSymbolsBookmarkRemove className="text-md text-error" />
         </button>
       )}
+      {url && detecting && (
+        <progress
+          className={classnames(
+            "progress w-full h-[1px] absolute bottom-0 left-0",
+            progressType
+          )}
+        />
+      )}
     </div>
   )
 }
 
-export default React.memo(TreeNodeTitleContainer, (prevProps, nextProps) => {
+const TreeNodeTitleMemo = React.memo(TreeNodeTitle, (prevProps, nextProps) => {
   return (
     prevProps.node.id === nextProps.node.id &&
     prevProps.node.url === nextProps.node.url &&
     prevProps.node.title === nextProps.node.title
   )
 })
+
+export default TreeNodeTitleMemo
