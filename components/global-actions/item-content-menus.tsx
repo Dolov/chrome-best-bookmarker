@@ -29,7 +29,7 @@ const ROOT_IDS = ["0", "1", "2"]
 enum Actions {
   COPY = "copy",
   MOVE = "move",
-  RENAME = "rename",
+  EDIT = "eidt",
   SEARCH = "search",
   DELETE = "delete",
   DOWNLOAD = "download",
@@ -77,10 +77,10 @@ const ItemContentMenus: React.FC<{
     const { id, url } = contextMenuNode
 
     const actions = {
-      rename: {
-        title: "重命名",
+      eidt: {
+        title: "编辑",
         Icon: MdiRename,
-        key: Actions.RENAME
+        key: Actions.EDIT
       },
       move: {
         title: "移动",
@@ -136,16 +136,16 @@ const ItemContentMenus: React.FC<{
     if (url) {
       return [
         {
-          key: "fileOperations",
-          actions: [actions.rename, actions.copy, actions.delete]
+          key: "operations",
+          actions: [actions.eidt, actions.move]
         },
         {
           key: "searchAndSelection",
-          actions: [actions.search, checkbox]
+          actions: [actions.search, checkbox, actions.copy]
         },
         {
-          key: "folderManagement",
-          actions: [actions.move]
+          group: "delete",
+          actions: [actions.delete]
         }
       ]
     }
@@ -154,27 +154,32 @@ const ItemContentMenus: React.FC<{
     if (ROOT_IDS.includes(id)) {
       return [
         {
-          key: "fileOperations",
+          key: "operations",
           actions: [actions.copy, actions.download]
         },
         {
-          key: "folderManagement",
+          key: "management",
           actions: [actions.move, actions.newFolder]
         }
       ]
     }
     return [
       {
-        group: "folderManagement",
-        actions: [actions.rename, actions.newFolder, actions.move]
-      },
-      {
-        group: "fileOperations",
-        actions: [actions.download, actions.copy, actions.deleteDir]
+        group: "management",
+        actions: [actions.eidt, actions.move, actions.newFolder]
       },
       {
         group: "searchAndSelection",
         actions: [actions.search, checkbox]
+      },
+      {
+        group: "operations",
+        actions: [actions.download, actions.copy]
+      },
+
+      {
+        group: "delete",
+        actions: [actions.deleteDir]
       }
     ]
   }, [contextMenuNode, checkboxVisible])
