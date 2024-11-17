@@ -2,9 +2,9 @@ import classnames from "classnames"
 import React from "react"
 
 import { themes } from "~/components/utils"
-import { useThemeChange } from "~/hooks/useSetting"
+import { useThemeChange } from "~hooks/use-setting"
 
-import "~/tailwindcss.css"
+import "~/tailwindcss.less"
 
 document.title = `${chrome.i18n.getMessage("extensionName")}`
 

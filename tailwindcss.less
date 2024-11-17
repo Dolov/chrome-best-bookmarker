@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .center {
+    @apply flex justify-center items-center;
+  }
+
+  .no-after::after {
+    content: none;
+  }
+
+  .text-ellipsis {
+    @apply overflow-hidden whitespace-nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .item-border {
+    @apply border border-base-content/20 outline outline-2 outline-offset-2 outline-transparent hover:border-base-content/40;
+  }
+
+  .item-border-active {
+    @apply !outline-base-content;
+  }
+
+}
+
+
+.highlight {
+  font-weight: 900;
+}
+.highlight-1 {
+  /* color: #f5222d; */
+  @apply text-secondary;
+}
+.highlight-2 {
+  /* color: #faad14; */
+  @apply text-accent;
+}
+.highlight-3 {
+  /* color: #a0d911; */
+  @apply text-primary;
+}
+.highlight-4 {
+  /* color: #eb2f96; */
+  @apply text-info;
+}
+.highlight-5 {
+  /* color: #722ed1; */
+  @apply text-success;
+}
+.highlight-6 {
+  /* color: #1677ff; */
+  @apply text-warning;
+}
+.highlight-7 {
+  color: #13c2c2;
+  @apply text-error;
+}
+.highlight-8 {
+  color: #2f54eb;
+}
+.highlight-9 {
+  color: #fadb14;
+}
+
+summary.active {
+  @apply bg-neutral;
+  @apply text-neutral-content;
+}
+
+
+
+@bounceIn: ~"bubble-bounceIn";
+@bounceOut: ~"bubble-bounceOut";
+
+@keyframes @bounceIn {
+  from,
+  20%,
+  40%,
+  60%,
+  80%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    -webkit-transform: scale3d(0.97, 0.97, 0.97);
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes @bounceOut {
+  20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  50%,
+  55% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+}
+
+.bubble {
+  z-index: 10;
+  position: relative;
+
+  &-surround {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: var(--offset-size);
+    margin-left: var(--offset-size);
+    display: none;
+    z-index: -1;
+
+    &.animate {
+      display: block;
+    }
+
+    &.animate.visible {
+      animation: @bounceIn 0.3s;
+    }
+
+    &.animate.hidden {
+      animation: @bounceOut 0.3s forwards;
+    }
+  }
+
+  &-sub {
+    top: var(--offset-size);
+    left: var(--offset-size);
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 2px 10px 0 var(--shadow-color),
+      0 2px 8px 0 var(--shadow-color);
+    &:hover {
+    }
+  }
+
+  &:hover {
+    // box-shadow:
+    //   0 2px 10px 0 var(--color),
+    //   0 2px 8px 0 var(--color);
+  }
+
+  &.attach {
+    transition: 0.3s;
+
+    &.right:hover {
+      border-radius: 50% 0 0 50%;
+    }
+
+    &.left:hover {
+      border-radius: 0 50% 50% 0;
+    }
+  }
+}

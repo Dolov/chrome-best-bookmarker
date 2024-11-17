@@ -1,6 +1,6 @@
 import React from "react"
 
-import useDebouncedValue from "~hooks/useDebouncedValue"
+import useDebouncedValue from "~hooks/use-debounced-value"
 
 import { GlobalStateContext } from "./global-provider"
 import Tree from "./tree"

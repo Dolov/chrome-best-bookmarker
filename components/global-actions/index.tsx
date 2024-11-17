@@ -2,6 +2,7 @@ import React, { Fragment } from "react"
 
 import type { BookmarkProps } from "../utils"
 import EditAction from "./edit-action"
+import FloatButton from "./float-button"
 import ItemContentMenus from "./item-content-menus"
 import MoveAction from "./move-action"
 import NewFolderAction from "./new-folder-action"
@@ -32,6 +33,7 @@ const GlobalActions: React.FC<{
 
   return (
     <Fragment>
+      <FloatButton />
       <MoveAction
         node={node}
         onClose={() => setMoveVisible(false)}

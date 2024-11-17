@@ -21,9 +21,9 @@ import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
 import type { SearchInputRefProps } from "~components/search-input"
-import { useThemeChange } from "~hooks/useSetting"
+import { useThemeChange } from "~hooks/use-setting"
 
-import "~/tailwindcss.css"
+import "~/tailwindcss.less"
 
 const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
   props
@@ -114,8 +114,13 @@ const Manage: React.FC<{ dataSource: BookmarkProps[]; init: () => void }> = (
 }
 
 export default () => {
+  const [settings] = useStorage(Storage.SETTINGS, {
+    checkbox: true
+  })
   const [dataSource, setDataSource] = React.useState([])
-  const [checkboxVisible, setCheckboxVisible] = React.useState(false)
+  const [checkboxVisible, setCheckboxVisible] = React.useState(
+    settings.checkbox
+  )
   const [contextMenuNode, setContextMenuNode] =
     React.useState<BookmarkProps>(null)
   const [contextMenuPosition, setContextMenuPosition] = React.useState<{
