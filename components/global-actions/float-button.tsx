@@ -109,7 +109,7 @@ const FloatButton = () => {
   const accessibleDetectDone = accessibleDetectInfo.status === "done"
 
   return (
-    <div className="fixed bottom-20 right-36">
+    <div className="fixed bottom-24 right-36">
       <Bubble
         subSize={40}
         subRadius={50}
@@ -121,7 +121,7 @@ const FloatButton = () => {
             shadowColor: "oklch(var(--in))",
             render(angle) {
               return (
-                <div className="tooltip center p-2">
+                <div data-tip="圈子" className="tooltip center p-2">
                   <button
                     onClick={handleCircle}
                     className="btn btn-sm btn-info btn-circle mx-2">
@@ -136,7 +136,7 @@ const FloatButton = () => {
             shadowColor: "oklch(var(--a))",
             render(angle) {
               return (
-                <div className="tooltip center p-2">
+                <div data-tip="设置" className="tooltip center p-2">
                   <button
                     onClick={handleSetting}
                     className="btn btn-sm btn-accent btn-circle mx-2">
@@ -151,7 +151,9 @@ const FloatButton = () => {
             shadowColor: "oklch(var(--s))",
             render(angle) {
               return (
-                <div className="tooltip center p-2">
+                <div
+                  data-tip="Bug & 功能报告"
+                  className="tooltip tooltip-bottom p-2">
                   <button
                     onClick={handleIssues}
                     className="btn btn-sm btn-secondary btn-circle mx-2">
@@ -167,7 +169,7 @@ const FloatButton = () => {
             shadowColor: "oklch(var(--wa))",
             render(angle) {
               return (
-                <div className="tooltip center p-2">
+                <div data-tip="失效站点检测" className="tooltip center p-2">
                   <div className="indicator">
                     {!accessibleDetectIdle && (
                       <span className="indicator-item badge badge-warning text-white">
