@@ -10,7 +10,6 @@ import {
   MingcuteGroup2Fill,
   WhhWebsite
 } from "~components/icons"
-import { runWithConcurrencyLimit } from "~utils"
 
 import { AccessibleDetectContext } from "../context/accessible-detect-provider"
 import { GlobalStateContext } from "../context/global-provider"

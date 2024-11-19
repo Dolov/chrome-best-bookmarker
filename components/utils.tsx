@@ -363,3 +363,28 @@ export const themes = [
   "nord",
   "sunset"
 ]
+
+export const findNodeById = (nodes, id) => {
+  for (let node of nodes) {
+    if (node.id === id) {
+      return node
+    }
+    if (node.children) {
+      const childNode = findNodeById(node.children, id)
+      if (childNode) return childNode
+    }
+  }
+  return null
+}
+
+// 递归获取子节点的id
+export const getChildrenIds = (node) => {
+  const ids = []
+  if (node.children) {
+    for (let child of node.children) {
+      ids.push(child.id)
+      ids.push(...getChildrenIds(child))
+    }
+  }
+  return ids
+}

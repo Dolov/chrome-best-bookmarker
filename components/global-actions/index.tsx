@@ -35,7 +35,7 @@ const GlobalActions: React.FC<{
   return (
     <Fragment>
       <FloatButton />
-      <DetectAlert />
+      {/* <DetectAlert /> */}
       <MoveAction
         node={node}
         onClose={() => setMoveVisible(false)}

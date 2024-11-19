@@ -3,7 +3,6 @@ import * as React from "react"
 
 import { useStorage } from "@plasmohq/storage/hook"
 
-import FileTree from "~/components/tree"
 import {
   formattedTreeNodesTitle,
   matchSearch,
@@ -17,6 +16,7 @@ import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
 import SearchInput from "~components/search-input"
 import type { SearchInputRefProps } from "~components/search-input"
+import FileTree from "~components/tree"
 
 const ManageMain: React.FC<{
   dataSource: BookmarkProps[]
