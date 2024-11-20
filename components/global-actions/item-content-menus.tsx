@@ -68,13 +68,24 @@ const ItemContentMenus: React.FC<{
     }
   }
 
+  const handleEscape = (e) => {
+    if (e.key === "Escape") {
+      clear()
+    }
+  }
+
   React.useEffect(() => {
     if (contextMenuNode) {
       document.addEventListener("click", handleClickOutside)
+      document.addEventListener("keydown", handleEscape)
     } else {
       document.removeEventListener("click", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
     }
-    return () => document.removeEventListener("click", handleClickOutside)
+    return () => {
+      document.removeEventListener("click", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+    }
   }, [contextMenuNode])
 
   const actionGroups: {

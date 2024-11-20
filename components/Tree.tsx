@@ -1,8 +1,6 @@
 import classnames from "classnames"
 import * as React from "react"
 
-import useControllableValue from "~hooks/use-controllable-value"
-
 import { FileIcon, TinyFolderIcon } from "./icons"
 import { getChildrenIds } from "./utils"
 
@@ -10,12 +8,10 @@ interface TreeItemProps {
   node: any
   activeId?: string
   checkbox?: boolean
+  selectedIds?: string[]
   nodeClassName?: string
   handleItemClick?: (data: any, e: React.MouseEvent) => void
-  selectedIds?: string[]
-  onCheckboxChange?: (node: any, checked: boolean, parentNode) => void
-  parentChecked?: boolean
-  parentNode?: any
+  onCheckboxChange?: (node: any, checked: boolean) => void
 }
 
 const TreeItem: React.FC<TreeItemProps> = ({
@@ -23,11 +19,9 @@ const TreeItem: React.FC<TreeItemProps> = ({
   activeId,
   checkbox,
   nodeClassName,
-  parentChecked,
-  handleItemClick = () => {},
   selectedIds = [],
-  onCheckboxChange = () => {},
-  parentNode
+  handleItemClick = () => {},
+  onCheckboxChange = () => {}
 }) => {
   const { id, children = [], url, title } = node
   const active = id === activeId
@@ -36,7 +30,7 @@ const TreeItem: React.FC<TreeItemProps> = ({
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target
-    onCheckboxChange(node, checked, parentNode)
+    onCheckboxChange(node, checked)
   }
 
   let child = (
@@ -71,9 +65,7 @@ const TreeItem: React.FC<TreeItemProps> = ({
             }}
             activeId={activeId}
             checkbox={checkbox}
-            parentNode={node}
             selectedIds={selectedIds}
-            parentChecked={checked}
             nodeClassName={nodeClassName}
             handleItemClick={handleItemClick}
             onCheckboxChange={onCheckboxChange}
@@ -116,26 +108,20 @@ const Tree = (props: {
   checkbox?: boolean
   className?: string
   nodeClassName?: string
-  handleItemClick?: (node: any, e: React.MouseEvent) => void
   selectedIds?: string[]
+  handleItemClick?: (node: any, e: React.MouseEvent) => void
   onCheckboxChange?: (selectedIds: string[]) => void
 }) => {
   const {
     data,
-    className,
     activeId,
+    checkbox,
+    className,
+    selectedIds,
     nodeClassName,
     handleItemClick,
-    checkbox
+    onCheckboxChange
   } = props
-  const [selectedIds, onCheckboxChange] = useControllableValue<string[]>(
-    props,
-    {
-      defaultValue: [],
-      valuePropName: "selectedIds",
-      trigger: "onCheckboxChange"
-    }
-  )
 
   const checkedChain = (node, nextIds) => {
     if (!node.parentNode) return nextIds
