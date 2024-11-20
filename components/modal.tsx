@@ -1,13 +1,15 @@
 import React, { Fragment } from "react"
 
-const Modal: React.FC<{
+export interface ModalProps {
   width?: number | string
   visible: boolean
   onOk?: () => void
   title?: string
   onClose?: () => void
   children: React.ReactNode
-}> = (props) => {
+}
+
+const Modal: React.FC<ModalProps> = (props) => {
   const { visible, onClose, onOk, children, title, width } = props
   const id = React.useMemo(() => "modal_" + Date.now(), [])
 
@@ -59,4 +61,34 @@ const Modal: React.FC<{
   )
 }
 
-export default Modal
+/**
+ * HOC to control the visibility of a component
+ * @param WrappedComponent - The component to be wrapped
+ */
+function withVisibility<T extends object>(
+  WrappedComponent: React.ComponentType<T>
+) {
+  return function (props: T & ModalProps) {
+    const { visible } = props
+
+    const rendered = React.useRef(visible)
+
+    React.useEffect(() => {
+      if (visible) {
+        rendered.current = true
+      }
+    }, [visible])
+
+    if (!visible && !rendered.current) {
+      return null
+    }
+
+    if (visible) {
+      return <WrappedComponent {...props} />
+    }
+
+    return <WrappedComponent {...props} />
+  }
+}
+
+export default withVisibility(Modal)
