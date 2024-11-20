@@ -38,7 +38,7 @@ const NewFolderAction: React.FC<{
       title={`新建子文件夹`}
       visible={visible}
       onClose={onClose}>
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 p-1">
         <input
           type="text"
           placeholder="Type here"
