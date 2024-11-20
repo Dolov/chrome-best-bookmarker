@@ -28,10 +28,28 @@ const TreeItem: React.FC<TreeItemProps> = ({
   const isLeaf = children.length === 0
   const checked = selectedIds.includes(id) || false
 
+  const inputId = React.useMemo(() => {
+    return `input-${Date.now()}-${id}`
+  }, [id])
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target
     onCheckboxChange(node, checked)
   }
+
+  React.useEffect(() => {
+    if (url) return
+    const childrenIds = getChildrenIds(node)
+    const allChecked = childrenIds.every((id) => selectedIds.includes(id))
+    const notChecked = childrenIds.every((id) => !selectedIds.includes(id))
+    const input = document.querySelector(`#${inputId}`) as HTMLInputElement
+    if (!input) return
+    if (!notChecked && !allChecked) {
+      input.indeterminate = true
+    } else {
+      input.indeterminate = false
+    }
+  }, [selectedIds])
 
   let child = (
     <details open>
@@ -42,6 +60,7 @@ const TreeItem: React.FC<TreeItemProps> = ({
         })}>
         {checkbox && (
           <input
+            id={inputId}
             type="checkbox"
             checked={checked}
             onChange={handleCheckboxChange}
