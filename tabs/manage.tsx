@@ -27,6 +27,7 @@ export default () => {
     checkbox: true
   })
   const [dataSource, setDataSource] = React.useState([])
+  const [selectedIds, setSelectedIds] = React.useState([])
   const [accessibleDetectInfo, setAccessibleDetectInfo] = React.useState<
     Omit<AccessibleDetectContextProps, "setAccessibleDetectInfo">
   >({
@@ -100,13 +101,22 @@ export default () => {
     }
   }, [])
 
+  const selectState = React.useMemo(() => {
+    return {
+      selectedIds,
+      setSelectedIds
+    }
+  }, [selectedIds])
+
   return (
     <GlobalActionContext.Provider value={globalActions}>
-      <AccessibleDetectContext.Provider value={detectState}>
-        <GlobalStateContext.Provider value={globalState}>
-          <ManageMain init={init} />
-        </GlobalStateContext.Provider>
-      </AccessibleDetectContext.Provider>
+      <GlobalStateContext.Provider value={globalState}>
+        <AccessibleDetectContext.Provider value={detectState}>
+          <SelectContext.Provider value={selectState}>
+            <ManageMain />
+          </SelectContext.Provider>
+        </AccessibleDetectContext.Provider>
+      </GlobalStateContext.Provider>
     </GlobalActionContext.Provider>
   )
 }

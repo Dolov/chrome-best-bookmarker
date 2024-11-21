@@ -36,7 +36,7 @@ enum Actions {
   EDIT = "eidt",
   SEARCH = "search",
   DELETE = "delete",
-  DOWNLOAD = "download",
+  EXPORT = "export",
   DELETE_DIR = "delete-dir",
   NEW_FOLDER = "new-folder",
   CHECKBOX = "checkbox",
@@ -138,10 +138,10 @@ const ItemContentMenus: React.FC<{
         Icon: FluentFolderAdd24Filled,
         key: Actions.NEW_FOLDER
       },
-      download: {
-        title: "下载",
+      export: {
+        title: "导出",
         Icon: RiDownloadCloud2Fill,
-        key: Actions.DOWNLOAD
+        key: Actions.EXPORT
       },
       checkbox: {
         title: "多选",
@@ -189,7 +189,7 @@ const ItemContentMenus: React.FC<{
       return [
         {
           group: "operations",
-          actions: [actions.copy, actions.download]
+          actions: [actions.copy, actions.export]
         },
         {
           group: "management",
@@ -208,7 +208,7 @@ const ItemContentMenus: React.FC<{
       },
       {
         group: "operations",
-        actions: [actions.download, actions.copy]
+        actions: [actions.export, actions.copy]
       },
 
       {
@@ -277,7 +277,7 @@ const ItemContentMenus: React.FC<{
       clear()
     }
 
-    if (key === Actions.DOWNLOAD) {
+    if (key === Actions.EXPORT) {
       downloadBookmarkAsHtml(children, originalTitle)
       clear()
     }

@@ -1,11 +1,11 @@
 import * as React from "react"
 
 export interface SelectContextProps {
-  selectIds: string[]
-  cancelSelect: () => void
+  selectedIds: string[]
+  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export const SelectContext = React.createContext<SelectContextProps>({
-  selectIds: [],
-  cancelSelect: () => {}
+  selectedIds: [],
+  setSelectedIds: () => {}
 })

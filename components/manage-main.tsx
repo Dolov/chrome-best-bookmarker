@@ -8,12 +8,12 @@ import {
   matchSearch,
   MatchTypeEnum
 } from "~/components/utils"
-import type { BookmarkProps } from "~/components/utils"
 import { Storage } from "~/utils"
 import {
   GlobalActionContext,
   GlobalStateContext
 } from "~components/context/global-provider"
+import { SelectContext } from "~components/context/select-provivder"
 import GlobalActions from "~components/global-actions"
 import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
@@ -27,11 +27,13 @@ const ManageMain: React.FC<{}> = (props) => {
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
   const [searchType] = useStorage(Storage.SEARCH_TYPE, MatchTypeEnum.MIXIN)
   const [keywords, setKeywords] = React.useState<string[]>([])
-  const [selectedIds, setSelectedIds] = React.useState([])
 
+  const selectState = React.useContext(SelectContext)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
   const { contextMenuNode, checkboxVisible, dataSource } = globalState
+
+  const { selectedIds, setSelectedIds } = selectState
 
   React.useEffect(() => {
     if (!checkboxVisible) {
@@ -109,4 +111,4 @@ const ManageMain: React.FC<{}> = (props) => {
   )
 }
 
-export default ManageMain
+export default React.memo(ManageMain)
