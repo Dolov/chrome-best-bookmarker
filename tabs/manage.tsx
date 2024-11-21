@@ -12,6 +12,10 @@ import {
   GlobalActionContext,
   GlobalStateContext
 } from "~components/context/global-provider"
+import {
+  SelectContext,
+  type SelectContextProps
+} from "~components/context/select-provivder"
 import ManageMain from "~components/manage-main"
 import { useThemeChange } from "~hooks/use-setting"
 
@@ -40,6 +44,7 @@ export default () => {
   )
   const [contextMenuNode, setContextMenuNode] =
     React.useState<BookmarkProps>(null)
+
   const [contextMenuPosition, setContextMenuPosition] = React.useState<{
     x: number
     y: number
@@ -99,7 +104,7 @@ export default () => {
     <GlobalActionContext.Provider value={globalActions}>
       <AccessibleDetectContext.Provider value={detectState}>
         <GlobalStateContext.Provider value={globalState}>
-          <ManageMain dataSource={dataSource} init={init} />
+          <ManageMain init={init} />
         </GlobalStateContext.Provider>
       </AccessibleDetectContext.Provider>
     </GlobalActionContext.Provider>

@@ -10,7 +10,10 @@ import {
 } from "~/components/utils"
 import type { BookmarkProps } from "~/components/utils"
 import { Storage } from "~/utils"
-import { GlobalStateContext } from "~components/context/global-provider"
+import {
+  GlobalActionContext,
+  GlobalStateContext
+} from "~components/context/global-provider"
 import GlobalActions from "~components/global-actions"
 import { WhhSearchfolder } from "~components/icons"
 import { Case, MatchType, Union } from "~components/search-condition"
@@ -18,11 +21,7 @@ import SearchInput from "~components/search-input"
 import type { SearchInputRefProps } from "~components/search-input"
 import FileTree from "~components/tree"
 
-const ManageMain: React.FC<{
-  dataSource: BookmarkProps[]
-  init: () => void
-}> = (props) => {
-  const { init, dataSource } = props
+const ManageMain: React.FC<{}> = (props) => {
   const searchInputRef = React.useRef<SearchInputRefProps>(null)
   const [union] = useStorage(Storage.UNION, true)
   const [sensitive] = useStorage(Storage.CASE_SENSITIVE, false)
@@ -31,7 +30,8 @@ const ManageMain: React.FC<{
   const [selectedIds, setSelectedIds] = React.useState([])
 
   const globalState = React.useContext(GlobalStateContext)
-  const { contextMenuNode, checkboxVisible } = globalState
+  const globalActions = React.useContext(GlobalActionContext)
+  const { contextMenuNode, checkboxVisible, dataSource } = globalState
 
   React.useEffect(() => {
     if (!checkboxVisible) {
@@ -78,7 +78,7 @@ const ManageMain: React.FC<{
               ref={searchInputRef}
               className="flex-1"
               onChange={debounceOnChange}
-              onPressEnter={init}
+              onPressEnter={globalActions.refresh}
               prefix={<WhhSearchfolder className="opacity-70" />}
               suffix={
                 <div className="actions flex">
