@@ -6,6 +6,7 @@ import {
   MaterialSymbolsContentCopyRounded,
   MaterialSymbolsDelete,
   MaterialSymbolsDriveFileMoveRounded,
+  MingcuteGroup2Fill,
   MingcuteMultiselectFill,
   RiDownloadCloud2Fill,
   UiwChrome
@@ -50,20 +51,23 @@ const ExpandableButtons = () => {
             "opacity-0 -translate-y-10": !isExpanded
           }
         )}>
-        <button className="btn btn-circle btn-sm">
-          <UiwChrome className="text-lg" />
+        <button className="btn btn-circle btn-sm btn-primary btn-outline group">
+          <UiwChrome className="text-lg group-hover:text-white" />
         </button>
-        <button className="btn btn-circle btn-sm">
-          <MaterialSymbolsDriveFileMoveRounded className="text-lg" />
+        <button className="btn btn-circle btn-sm btn-secondary btn-outline group">
+          <MaterialSymbolsDriveFileMoveRounded className="text-lg group-hover:text-white" />
         </button>
-        <button className="btn btn-circle btn-sm">
-          <RiDownloadCloud2Fill className="text-lg" />
+        <button className="btn btn-circle btn-sm btn-info btn-outline group">
+          <RiDownloadCloud2Fill className="text-lg group-hover:text-white" />
         </button>
-        <button className="btn btn-circle btn-sm">
-          <MaterialSymbolsContentCopyRounded className="text-lg" />
+        <button className="btn btn-circle btn-sm btn-success btn-outline group">
+          <MaterialSymbolsContentCopyRounded className="text-lg group-hover:text-white" />
         </button>
-        <button className="btn btn-circle btn-sm">
-          <MaterialSymbolsDelete className="text-lg" />
+        <button className="btn btn-circle btn-sm btn-accent btn-outline group">
+          <MingcuteGroup2Fill className="text-lg group-hover:text-white" />
+        </button>
+        <button className="btn btn-circle btn-sm btn-error btn-outline group">
+          <MaterialSymbolsDelete className="text-lg group-hover:text-white" />
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import type { BookmarkProps } from "../utils"
 import BatchActions from "./batch-actions"
 import DetectAlert from "./detect-alert"
 import EditAction from "./edit-action"
-import FloatButton from "./float-button"
+import FloatActions from "./float-actions"
 import ItemContentMenus from "./item-content-menus"
 import MoveAction from "./move-action"
 import NewFolderAction from "./new-folder-action"
@@ -35,7 +35,7 @@ const GlobalActions: React.FC<{
 
   return (
     <Fragment>
-      <FloatButton />
+      <FloatActions />
       <BatchActions />
       {/* <DetectAlert /> */}
       <MoveAction
