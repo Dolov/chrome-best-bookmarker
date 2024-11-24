@@ -72,8 +72,8 @@ const ManageMain: React.FC<{}> = (props) => {
 
   return (
     <div className="h-screen w-screen flex justify-center">
-      <GlobalActions addKeyword={addKeyword} />
-      <div className="w-[1000px] flex flex-col">
+      <div className="w-[1000px] relative flex flex-col">
+        <GlobalActions addKeyword={addKeyword} />
         <div className="mb-4 mt-6">
           <label className="input input-bordered flex items-center gap-2 rounded-full">
             <SearchInput

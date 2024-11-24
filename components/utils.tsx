@@ -57,7 +57,7 @@ export const formattedTreeNodesTitle = (treeNodes = []) => {
           href={url}
           title={title}
           target="_blank"
-          className="link link-hover">
+          className="link link-hover pr-4">
           {title}
         </a>
       )

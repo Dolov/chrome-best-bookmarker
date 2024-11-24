@@ -36,7 +36,7 @@ const ExpandableButtons = () => {
   if (!visible) return null
 
   return (
-    <div className="fixed top-24 right-36 flex flex-col items-center">
+    <div className="absolute top-24 -right-20 flex flex-col items-center">
       <button
         onClick={toggleExpand}
         className="btn btn-circle btn-neutral btn-sm z-20">
@@ -51,24 +51,41 @@ const ExpandableButtons = () => {
             "opacity-0 -translate-y-10": !isExpanded
           }
         )}>
-        <button className="btn btn-circle btn-sm btn-primary btn-outline group">
-          <UiwChrome className="text-lg group-hover:text-white" />
-        </button>
-        <button className="btn btn-circle btn-sm btn-secondary btn-outline group">
-          <MaterialSymbolsDriveFileMoveRounded className="text-lg group-hover:text-white" />
-        </button>
-        <button className="btn btn-circle btn-sm btn-info btn-outline group">
-          <RiDownloadCloud2Fill className="text-lg group-hover:text-white" />
-        </button>
-        <button className="btn btn-circle btn-sm btn-success btn-outline group">
-          <MaterialSymbolsContentCopyRounded className="text-lg group-hover:text-white" />
-        </button>
-        <button className="btn btn-circle btn-sm btn-accent btn-outline group">
-          <MingcuteGroup2Fill className="text-lg group-hover:text-white" />
-        </button>
-        <button className="btn btn-circle btn-sm btn-error btn-outline group">
-          <MaterialSymbolsDelete className="text-lg group-hover:text-white" />
-        </button>
+        <div data-tip="打开" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-primary btn-outline group">
+            <UiwChrome className="text-lg group-hover:text-white" />
+          </button>
+        </div>
+
+        <div data-tip="移动" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-secondary btn-outline group">
+            <MaterialSymbolsDriveFileMoveRounded className="text-lg group-hover:text-white" />
+          </button>
+        </div>
+
+        <div data-tip="导出" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-info btn-outline group">
+            <RiDownloadCloud2Fill className="text-lg group-hover:text-white" />
+          </button>
+        </div>
+
+        <div data-tip="复制" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-success btn-outline group">
+            <MaterialSymbolsContentCopyRounded className="text-lg group-hover:text-white" />
+          </button>
+        </div>
+
+        <div data-tip="分享" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-accent btn-outline group">
+            <MingcuteGroup2Fill className="text-lg group-hover:text-white" />
+          </button>
+        </div>
+
+        <div data-tip="删除" className="tooltip tooltip-right">
+          <button className="btn btn-circle btn-sm btn-error btn-outline group">
+            <MaterialSymbolsDelete className="text-lg group-hover:text-white" />
+          </button>
+        </div>
       </div>
     </div>
   )

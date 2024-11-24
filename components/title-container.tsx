@@ -101,20 +101,23 @@ const TreeNodeTitle: React.FC<{
     <div
       data-id={elementId}
       onContextMenu={onContextMenu}
-      className="h-full w-full flex items-center group relative">
-      <span
-        className={classnames("flex-1", {
-          "line-through": inaccessible
-        })}>
-        {children}
-      </span>
-      {url && (
-        <button
-          onClick={deleteBookmark}
-          className="hidden btn btn-circle btn-sm min-h-0 w-4 h-4 group-hover:block">
-          <MaterialSymbolsBookmarkRemove className="text-md text-error" />
-        </button>
-      )}
+      className="w-full h-full">
+      <div className="h-full flex items-center group relative">
+        <span
+          className={classnames({
+            "line-through": inaccessible
+          })}>
+          {children}
+        </span>
+        <div className="flex-1 h-full cursor-auto" />
+        {url && (
+          <button
+            onClick={deleteBookmark}
+            className="hidden btn btn-circle btn-sm min-h-0 w-4 h-4 group-hover:block">
+            <MaterialSymbolsBookmarkRemove className="text-md text-error" />
+          </button>
+        )}
+      </div>
       {url && detecting && (
         <progress
           className={classnames(

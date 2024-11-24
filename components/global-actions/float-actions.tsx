@@ -108,7 +108,7 @@ const FloatButton = () => {
   const accessibleDetectDone = accessibleDetectInfo.status === "done"
 
   return (
-    <div className="fixed bottom-24 right-36">
+    <div className="absolute bottom-24 -right-20">
       <Bubble
         subSize={40}
         subRadius={50}
