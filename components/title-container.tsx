@@ -33,7 +33,7 @@ const TreeNodeTitle: React.FC<{
     currentNode: currentDetectNode
   } = accessibleDetectInfo
 
-  const { id, url } = node
+  const { id, url, title } = node
   const inaccessible = failIds.includes(id)
   const detecting = currentDetectNode?.id === id
   const progressType = progressTypes[detectingIndex % progressTypes.length]
@@ -47,7 +47,8 @@ const TreeNodeTitle: React.FC<{
 
   // console.log("render")
 
-  const deleteBookmark = () => {
+  const deleteBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation()
     chrome.runtime.sendMessage(
       {
         id,
@@ -101,23 +102,28 @@ const TreeNodeTitle: React.FC<{
     <div
       data-id={elementId}
       onContextMenu={onContextMenu}
-      className="w-full h-full">
-      <div className="h-full flex items-center group relative">
-        <span
-          className={classnames({
+      className="py-1 w-full flex items-center justify-between group relative">
+      {!url && children}
+      {url && (
+        <a
+          key={id}
+          href={url}
+          title={title}
+          onClick={(e) => e.stopPropagation()}
+          target="_blank"
+          className={classnames("link link-hover", {
             "line-through": inaccessible
           })}>
           {children}
-        </span>
-        <div className="flex-1 h-full cursor-auto" />
-        {url && (
-          <button
-            onClick={deleteBookmark}
-            className="hidden btn btn-circle btn-sm min-h-0 w-4 h-4 group-hover:block">
-            <MaterialSymbolsBookmarkRemove className="text-md text-error" />
-          </button>
-        )}
-      </div>
+        </a>
+      )}
+      {url && (
+        <button
+          onClick={deleteBookmark}
+          className="hidden btn btn-circle btn-sm min-h-0 w-4 h-4 group-hover:block">
+          <MaterialSymbolsBookmarkRemove className="text-md text-error" />
+        </button>
+      )}
       {url && detecting && (
         <progress
           className={classnames(

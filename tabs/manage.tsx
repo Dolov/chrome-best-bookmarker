@@ -23,9 +23,12 @@ import "~/tailwindcss.less"
 
 export default () => {
   useThemeChange()
-  const [settings] = useStorage(Storage.SETTINGS, {
+  const [settings, setSettings] = useStorage(Storage.SETTINGS, {
     checkbox: true
   })
+  const [checkboxVisible, handleCheckboxVisible] = React.useState(
+    settings.checkbox
+  )
   const [dataSource, setDataSource] = React.useState([])
   const [selectedIds, setSelectedIds] = React.useState([])
   const [accessibleDetectInfo, setAccessibleDetectInfo] = React.useState<
@@ -40,9 +43,6 @@ export default () => {
     currentNode: null
   })
 
-  const [checkboxVisible, setCheckboxVisible] = React.useState(
-    settings.checkbox
-  )
   const [contextMenuNode, setContextMenuNode] =
     React.useState<BookmarkProps>(null)
 
@@ -54,6 +54,22 @@ export default () => {
   React.useEffect(() => {
     init()
   }, [])
+
+  React.useEffect(() => {
+    const always = settings.checkbox
+    const visible = selectedIds.length > 0
+    handleCheckboxVisible(always || visible)
+  }, [selectedIds, settings.checkbox])
+
+  const setCheckboxVisible = (checkboxVisible) => {
+    setSettings({
+      ...settings,
+      checkbox: checkboxVisible
+    })
+    if (!checkboxVisible) {
+      setSelectedIds([])
+    }
+  }
 
   const init = () => {
     chrome.runtime.sendMessage(
@@ -86,16 +102,16 @@ export default () => {
   const globalState = React.useMemo(() => {
     return {
       dataSource,
-      contextMenuNode,
       checkboxVisible,
+      contextMenuNode,
       contextMenuPosition
     }
-  }, [dataSource, contextMenuNode, checkboxVisible, contextMenuPosition])
+  }, [dataSource, contextMenuNode, contextMenuPosition, checkboxVisible])
 
   const globalActions = React.useMemo(() => {
     return {
-      setCheckboxVisible,
       setContextMenuNode,
+      setCheckboxVisible,
       setContextMenuPosition,
       refresh: init
     }

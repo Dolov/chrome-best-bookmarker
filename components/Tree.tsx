@@ -11,7 +11,7 @@ interface TreeItemProps {
   selectedIds?: string[]
   nodeClassName?: string
   handleItemClick?: (data: any, e: React.MouseEvent) => void
-  onCheckboxChange?: (node: any, checked: boolean) => void
+  handleCheckboxChange?: (node: any, checked: boolean) => void
 }
 
 const TreeItem: React.FC<TreeItemProps> = ({
@@ -21,7 +21,7 @@ const TreeItem: React.FC<TreeItemProps> = ({
   nodeClassName,
   selectedIds = [],
   handleItemClick = () => {},
-  onCheckboxChange = () => {}
+  handleCheckboxChange = () => {}
 }) => {
   const { id, children = [], url, title } = node
   const active = id === activeId
@@ -32,9 +32,14 @@ const TreeItem: React.FC<TreeItemProps> = ({
     return `input-${Date.now()}-${id}`
   }, [id])
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target
-    onCheckboxChange(node, checked)
+    handleCheckboxChange(node, checked)
+  }
+
+  const onTitleClick = (e: React.MouseEvent) => {
+    handleItemClick(node, e)
+    handleCheckboxChange(node, !checked)
   }
 
   React.useEffect(() => {
@@ -51,28 +56,38 @@ const TreeItem: React.FC<TreeItemProps> = ({
     }
   }, [selectedIds])
 
+  const wrapperClassNames = classnames("py-0", "flex", nodeClassName, {
+    active
+    // "no-after": isLeaf
+  })
+
+  const checkboxJsx = checkbox && (
+    <input
+      id={inputId}
+      type="checkbox"
+      checked={checked}
+      onChange={onCheckboxChange}
+      className={classnames("checkbox checkbox-xs", {
+        "checkbox-accent": !isLeaf,
+        "checkbox-secondary": isLeaf
+      })}
+    />
+  )
+
+  const titleJsx = (
+    <div
+      className="h-full flex-1 flex items-center title-jsx"
+      onClick={onTitleClick}>
+      {title}
+    </div>
+  )
+
   let child = (
     <details open>
-      <summary
-        className={classnames("py-0", "flex", nodeClassName, {
-          active,
-          "no-after": isLeaf
-        })}>
-        {checkbox && (
-          <input
-            id={inputId}
-            type="checkbox"
-            checked={checked}
-            onChange={handleCheckboxChange}
-            className="checkbox checkbox-accent checkbox-xs"
-          />
-        )}
+      <summary className={wrapperClassNames}>
+        {checkboxJsx}
         <TinyFolderIcon />
-        <div
-          className="flex-1 flex items-center h-full"
-          onClick={(e) => handleItemClick(node, e)}>
-          {title}
-        </div>
+        {titleJsx}
       </summary>
       <ul>
         {children.map((child) => (
@@ -87,7 +102,7 @@ const TreeItem: React.FC<TreeItemProps> = ({
             selectedIds={selectedIds}
             nodeClassName={nodeClassName}
             handleItemClick={handleItemClick}
-            onCheckboxChange={onCheckboxChange}
+            handleCheckboxChange={handleCheckboxChange}
           />
         ))}
       </ul>
@@ -96,24 +111,10 @@ const TreeItem: React.FC<TreeItemProps> = ({
 
   if (url) {
     child = (
-      <div
-        className={classnames("py-0", "flex", nodeClassName, {
-          active
-        })}>
-        {checkbox && (
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={handleCheckboxChange}
-            className="checkbox checkbox-secondary checkbox-xs"
-          />
-        )}
+      <div className={wrapperClassNames}>
+        {checkboxJsx}
         <FileIcon />
-        <div
-          className="flex-1 flex items-center h-full"
-          onClick={(e) => handleItemClick(node, e)}>
-          {title}
-        </div>
+        {titleJsx}
       </div>
     )
   }
@@ -129,7 +130,7 @@ const Tree = (props: {
   nodeClassName?: string
   selectedIds?: string[]
   handleItemClick?: (node: any, e: React.MouseEvent) => void
-  onCheckboxChange?: (selectedIds: string[]) => void
+  handleCheckboxChange?: (selectedIds: string[]) => void
 }) => {
   const {
     data,
@@ -139,7 +140,7 @@ const Tree = (props: {
     selectedIds,
     nodeClassName,
     handleItemClick,
-    onCheckboxChange
+    handleCheckboxChange
   } = props
 
   const checkedChain = (node, nextIds) => {
@@ -197,7 +198,7 @@ const Tree = (props: {
       const childrenIds = getChildrenIds(node)
       let nextIds = [...selectedIds, nodeId, ...childrenIds]
       const chain = checkedChain(node, nextIds)
-      onCheckboxChange(chain)
+      handleCheckboxChange(chain)
       return
     }
     const childrenIds = getChildrenIds(node)
@@ -205,7 +206,7 @@ const Tree = (props: {
       (id) => id !== nodeId && !childrenIds.includes(id)
     )
     const chain = unCheckedChain(node, nextIds)
-    onCheckboxChange(chain)
+    handleCheckboxChange(chain)
   }
 
   return (
@@ -223,7 +224,7 @@ const Tree = (props: {
           selectedIds={selectedIds}
           nodeClassName={nodeClassName}
           handleItemClick={handleItemClick}
-          onCheckboxChange={handleItemCheckboxChange}
+          handleCheckboxChange={handleItemCheckboxChange}
         />
       ))}
     </ul>

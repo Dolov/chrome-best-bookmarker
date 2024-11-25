@@ -48,25 +48,12 @@ export const formatTreeNodes = (treeNodes = []) => {
 
 export const formattedTreeNodesTitle = (treeNodes = []) => {
   return treeNodes.reduce((currentValue, item) => {
-    const { children = [], url, title } = item
-    let titleJsx = title
-    if (url) {
-      titleJsx = (
-        <a
-          key={item.id}
-          href={url}
-          title={title}
-          target="_blank"
-          className="link link-hover pr-4">
-          {title}
-        </a>
-      )
-    }
+    const { children = [], title } = item
     currentValue.push({
       ...item,
       title: (
         <TreeNodeTitleContainer key={item.id} node={item}>
-          {titleJsx}
+          {title}
         </TreeNodeTitleContainer>
       ),
       children: formattedTreeNodesTitle(children)

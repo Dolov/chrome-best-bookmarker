@@ -101,8 +101,7 @@ const ManageMain: React.FC<{}> = (props) => {
               checkbox={checkboxVisible}
               activeId={contextMenuNode?.id}
               selectedIds={selectedIds}
-              nodeClassName="h-[24px]"
-              onCheckboxChange={setSelectedIds}
+              handleCheckboxChange={setSelectedIds}
             />
           )}
         </div>
