@@ -23,6 +23,10 @@ const ExpandableButtons = () => {
     setIsExpanded((prev) => !prev)
   }
 
+  const clearSelected = () => {
+    setSelectedIds([])
+  }
+
   React.useEffect(() => {
     const visible = selectedIds.length > 0
     setIsExpanded(visible)
@@ -37,11 +41,21 @@ const ExpandableButtons = () => {
 
   return (
     <div className="absolute top-24 -right-20 flex flex-col items-center">
-      <button
-        onClick={toggleExpand}
-        className="btn btn-circle btn-neutral btn-sm z-20">
-        <MingcuteMultiselectFill className="text-lg" />
-      </button>
+      <div className="indicator">
+        <span className="indicator-item badge badge-secondary z-30 group">
+          {selectedIds.length}
+          <button
+            onClick={clearSelected}
+            className="hidden text-[8px] btn btn-circle btn-ghost btn-sm min-h-0 w-3 h-3 ml-1 group-hover:block">
+            ✕
+          </button>
+        </span>
+        <button
+          onClick={toggleExpand}
+          className="btn btn-circle btn-neutral btn-sm z-20">
+          <MingcuteMultiselectFill className="text-lg" />
+        </button>
+      </div>
 
       <div
         className={classnames(

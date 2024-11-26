@@ -38,14 +38,14 @@ const TreeNodeTitle: React.FC<{
   const detecting = currentDetectNode?.id === id
   const progressType = progressTypes[detectingIndex % progressTypes.length]
 
-  // React.useEffect(() => {
-  //   console.log("init")
-  //   return () => {
-  //     console.log("卸载")
-  //   }
-  // }, [])
+  React.useEffect(() => {
+    console.log("init")
+    return () => {
+      console.log("卸载")
+    }
+  }, [])
 
-  // console.log("render")
+  console.log("render")
 
   const deleteBookmark = (e: React.MouseEvent) => {
     e.stopPropagation()
