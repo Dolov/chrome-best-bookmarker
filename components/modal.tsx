@@ -1,3 +1,4 @@
+import classnames from "classnames"
 import React, { Fragment } from "react"
 
 export interface ModalProps {
@@ -7,10 +8,19 @@ export interface ModalProps {
   title?: string
   onClose?: () => void
   children: React.ReactNode
+  confirmButtonClassName?: string
 }
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const { visible, onClose, onOk, children, title, width } = props
+  const {
+    visible,
+    onClose,
+    onOk,
+    children,
+    title,
+    width,
+    confirmButtonClassName
+  } = props
   const id = React.useMemo(() => "modal_" + Date.now(), [])
 
   React.useEffect(() => {
@@ -46,7 +56,12 @@ const Modal: React.FC<ModalProps> = (props) => {
         <h3 className="font-bold text-lg pb-4">{title}</h3>
         <div className="flex flex-col flex-1 overflow-auto">{children}</div>
         <div className="modal-action">
-          <button className="btn btn-neutral mr-2" onClick={handleConfirm}>
+          <button
+            className={classnames(
+              "btn btn-neutral mr-2",
+              confirmButtonClassName
+            )}
+            onClick={handleConfirm}>
             Confirm
           </button>
           <button className="btn" onClick={handleClose}>

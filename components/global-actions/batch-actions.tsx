@@ -1,6 +1,12 @@
 import classnames from "classnames"
 import React, { useState } from "react"
 
+import { Message } from "~/utils"
+
+import {
+  GlobalActionContext,
+  GlobalStateContext
+} from "../context/global-provider"
 import { SelectContext } from "../context/select-provivder"
 import {
   MaterialSymbolsContentCopyRounded,
@@ -11,13 +17,18 @@ import {
   RiDownloadCloud2Fill,
   UiwChrome
 } from "../icons"
+import Modal from "../modal"
+import { findNodeById, getChildrenIds } from "../utils"
 
 const DURATION_TIME = 300
 
 const ExpandableButtons = () => {
+  const { dataSource } = React.useContext(GlobalStateContext)
+  const globalActions = React.useContext(GlobalActionContext)
   const { selectedIds, setSelectedIds } = React.useContext(SelectContext)
   const [isExpanded, setIsExpanded] = useState(true)
   const [visible, setVisible] = React.useState(false)
+  const [deleteVisible, setDeleteVisible] = React.useState(false)
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev)
@@ -36,6 +47,37 @@ const ExpandableButtons = () => {
       setTimeout(() => setVisible(false), DURATION_TIME)
     }
   }, [selectedIds])
+
+  const handleDelete = async () => {
+    if (selectedIds.length > 1) {
+      setDeleteVisible(true)
+      return
+    }
+    let idsToDelete = [...selectedIds]
+
+    while (idsToDelete.length > 0) {
+      const currentId = idsToDelete.shift()
+      const currentNode = findNodeById(dataSource, currentId)
+      if (!currentNode) continue
+
+      const childIds = getChildrenIds(currentNode)
+      idsToDelete = idsToDelete.filter(
+        (id) => id !== currentNode.id && !childIds.includes(id)
+      )
+
+      const messageAction = currentNode.url
+        ? Message.REMOVE_BOOKMARK
+        : Message.REMOVE_BOOKMARK_TREE
+
+      await chrome.runtime.sendMessage({
+        id: currentId,
+        action: messageAction
+      })
+    }
+
+    setSelectedIds([])
+    globalActions.refresh()
+  }
 
   if (!visible) return null
 
@@ -96,10 +138,21 @@ const ExpandableButtons = () => {
         </div>
 
         <div data-tip="删除" className="tooltip tooltip-right">
-          <button className="btn btn-circle btn-sm btn-error btn-outline group">
+          <button
+            onClick={handleDelete}
+            className="btn btn-circle btn-sm btn-error btn-outline group">
             <MaterialSymbolsDelete className="text-lg group-hover:text-white" />
           </button>
         </div>
+        <Modal
+          title="确定删除？"
+          visible={deleteVisible}
+          onClose={() => setDeleteVisible(false)}>
+          <div className="text-sm">
+            共计<strong className="px-1">{selectedIds.length}</strong>
+            个文件夹及书签，删除后无法恢复，请谨慎操作。
+          </div>
+        </Modal>
       </div>
     </div>
   )
