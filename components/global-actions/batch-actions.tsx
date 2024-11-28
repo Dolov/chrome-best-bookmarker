@@ -48,11 +48,7 @@ const ExpandableButtons = () => {
     }
   }, [selectedIds])
 
-  const handleDelete = async () => {
-    if (selectedIds.length > 1) {
-      setDeleteVisible(true)
-      return
-    }
+  const deleteAction = async () => {
     let idsToDelete = [...selectedIds]
 
     while (idsToDelete.length > 0) {
@@ -75,8 +71,20 @@ const ExpandableButtons = () => {
       })
     }
 
-    setSelectedIds([])
     globalActions.refresh()
+    setDeleteVisible(false)
+    setTimeout(() => {
+      setSelectedIds([])
+    }, 0)
+  }
+
+  const handleDelete = async () => {
+    if (!selectedIds.length) return
+    if (selectedIds.length === 1) {
+      await deleteAction()
+      return
+    }
+    setDeleteVisible(true)
   }
 
   if (!visible) return null
@@ -146,6 +154,7 @@ const ExpandableButtons = () => {
         </div>
         <Modal
           title="确定删除？"
+          onOk={deleteAction}
           visible={deleteVisible}
           onClose={() => setDeleteVisible(false)}>
           <div className="text-sm">
