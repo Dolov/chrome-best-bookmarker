@@ -18,7 +18,13 @@ import {
   UiwChrome
 } from "../icons"
 import Modal from "../modal"
-import { findNodeById, getChildrenIds } from "../utils"
+import {
+  copyTextToClipboard,
+  findNodeById,
+  getBookmarkListByIds,
+  getBookmarksToText,
+  getChildrenIds
+} from "../utils"
 
 const DURATION_TIME = 300
 
@@ -87,6 +93,13 @@ const ExpandableButtons = () => {
     setDeleteVisible(true)
   }
 
+  const handleCopy = async () => {
+    if (!selectedIds.length) return
+    const bookmarks = getBookmarkListByIds(dataSource, selectedIds)
+    const texts = getBookmarksToText(bookmarks)
+    await copyTextToClipboard(texts)
+  }
+
   if (!visible) return null
 
   return (
@@ -134,7 +147,9 @@ const ExpandableButtons = () => {
         </div>
 
         <div data-tip="复制" className="tooltip tooltip-right">
-          <button className="btn btn-circle btn-sm btn-success btn-outline group">
+          <button
+            onClick={handleCopy}
+            className="btn btn-circle btn-sm btn-success btn-outline group">
             <MaterialSymbolsContentCopyRounded className="text-lg group-hover:text-white" />
           </button>
         </div>

@@ -375,3 +375,17 @@ export const getChildrenIds = (node) => {
   }
   return ids
 }
+
+export const getBookmarkListByIds = (bookmarks, ids) => {
+  const nodes = []
+  for (let id of ids) {
+    const node = findNodeById(bookmarks, id)
+    if (node && !nodes.includes(node) && node.url) {
+      nodes.push(node)
+    }
+    if (node.children) {
+      nodes.push(...getBookmarkListByIds(node.children, getChildrenIds(node)))
+    }
+  }
+  return nodes
+}
