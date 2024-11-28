@@ -100,6 +100,14 @@ const ExpandableButtons = () => {
     await copyTextToClipboard(texts)
   }
 
+  const handleOpen = () => {
+    if (!selectedIds.length) return
+    const bookmarks = getBookmarkListByIds(dataSource, selectedIds)
+    bookmarks.forEach((bookmark) => {
+      chrome.tabs.create({ url: bookmark.url })
+    })
+  }
+
   if (!visible) return null
 
   return (
@@ -129,7 +137,9 @@ const ExpandableButtons = () => {
           }
         )}>
         <div data-tip="打开" className="tooltip tooltip-right">
-          <button className="btn btn-circle btn-sm btn-primary btn-outline group">
+          <button
+            onClick={handleOpen}
+            className="btn btn-circle btn-sm btn-primary btn-outline group">
             <UiwChrome className="text-lg group-hover:text-white" />
           </button>
         </div>
