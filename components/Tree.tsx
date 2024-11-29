@@ -137,10 +137,10 @@ const Tree = (props: {
     activeId,
     checkbox,
     className,
-    selectedIds,
+    selectedIds = [],
     nodeClassName,
     handleItemClick,
-    handleCheckboxChange
+    handleCheckboxChange = () => {}
   } = props
 
   const checkedChain = (node, nextIds) => {
