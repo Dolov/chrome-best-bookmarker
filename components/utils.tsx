@@ -10,7 +10,9 @@ export enum MatchTypeEnum {
 
 export interface BookmarkProps {
   id: string
+  index: number
   title: string
+  parentId?: string
   originalTitle: string
   url?: string
   children?: BookmarkProps[]

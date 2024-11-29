@@ -16,6 +16,7 @@ const GlobalActions: React.FC<{
   const [node, setNode] = React.useState<BookmarkProps>(null)
   const [moveVisible, setMoveVisible] = React.useState(false)
   const [editVisible, setEditVisible] = React.useState(false)
+  const [newFolderIndex, setNewFolderIndex] = React.useState<number>(null)
   const [newFolderVisible, setNewFolderVisible] = React.useState(false)
 
   const handleMove = (node: BookmarkProps) => {
@@ -28,8 +29,9 @@ const GlobalActions: React.FC<{
     setEditVisible(true)
   }
 
-  const handleNewFolder = (node: BookmarkProps) => {
+  const handleNewFolder = (node: BookmarkProps, index: number) => {
     setNode(node)
+    setNewFolderIndex(index)
     setNewFolderVisible(true)
   }
 
@@ -50,6 +52,7 @@ const GlobalActions: React.FC<{
       />
       <NewFolderAction
         node={node}
+        index={newFolderIndex}
         onClose={() => setNewFolderVisible(false)}
         visible={newFolderVisible}
       />

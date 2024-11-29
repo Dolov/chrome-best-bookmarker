@@ -1,3 +1,4 @@
+import classnames from "classnames"
 import React, { Fragment } from "react"
 
 import { Message } from "~/utils"
@@ -24,6 +25,7 @@ import {
 import {
   copyTextToClipboard,
   downloadBookmarkAsHtml,
+  findNodeById,
   getBookmarksToText
 } from "../utils"
 import type { BookmarkProps } from "../utils"
@@ -41,21 +43,23 @@ enum Actions {
   NEW_FOLDER = "new-folder",
   CHECKBOX = "checkbox",
   UNCHECKBOX = "uncheckbox",
-  SHARE = "share"
+  SHARE = "share",
+  IMPORT = "import"
 }
 
 const ItemContentMenus: React.FC<{
   addKeyword: (keyword: string) => void
   handleMove: (node: BookmarkProps) => void
   handleEdit: (node: BookmarkProps) => void
-  handleNewFolder: (node: BookmarkProps) => void
+  handleNewFolder: (node: BookmarkProps, index: number) => void
 }> = (props) => {
   const { addKeyword, handleMove, handleEdit, handleNewFolder } = props
   const menuRef = React.useRef(null)
   const globalState = React.useContext(GlobalStateContext)
   const globalActions = React.useContext(GlobalActionContext)
 
-  const { contextMenuNode, checkboxVisible, contextMenuPosition } = globalState
+  const { contextMenuNode, checkboxVisible, contextMenuPosition, dataSource } =
+    globalState
 
   const clear = () => {
     globalActions.setContextMenuNode(null)
@@ -140,7 +144,11 @@ const ItemContentMenus: React.FC<{
       },
       export: {
         title: "导出",
-        Icon: RiDownloadCloud2Fill,
+        Icon: (props) => (
+          <RiDownloadCloud2Fill
+            className={classnames("transform rotate-180", props.className)}
+          />
+        ),
         key: Actions.EXPORT
       },
       checkbox: {
@@ -158,6 +166,11 @@ const ItemContentMenus: React.FC<{
         Icon: MingcuteGroup2Fill,
         key: Actions.SHARE,
         className: "text-accent"
+      },
+      import: {
+        title: "导入",
+        Icon: RiDownloadCloud2Fill,
+        key: Actions.IMPORT
       }
     }
 
@@ -167,7 +180,7 @@ const ItemContentMenus: React.FC<{
       return [
         {
           group: "operations",
-          actions: [actions.eidt, actions.move]
+          actions: [actions.eidt, actions.move, actions.newFolder]
         },
         {
           group: "searchAndSelection",
@@ -189,11 +202,11 @@ const ItemContentMenus: React.FC<{
       return [
         {
           group: "operations",
-          actions: [actions.copy, actions.export]
+          actions: [actions.copy, actions.import, actions.export]
         },
         {
           group: "management",
-          actions: [actions.move, actions.newFolder]
+          actions: [actions.newFolder]
         }
       ]
     }
@@ -208,7 +221,7 @@ const ItemContentMenus: React.FC<{
       },
       {
         group: "operations",
-        actions: [actions.export, actions.copy]
+        actions: [actions.import, actions.export, actions.copy]
       },
 
       {
@@ -273,7 +286,15 @@ const ItemContentMenus: React.FC<{
     }
 
     if (key === Actions.NEW_FOLDER) {
-      handleNewFolder(contextMenuNode)
+      if (url) {
+        const { parentId, index } = contextMenuNode
+        const nextIndex = index + 1
+        const parentNode = findNodeById(dataSource, parentId)
+        handleNewFolder(parentNode, nextIndex)
+      } else {
+        const firstIndex = 0
+        handleNewFolder(contextMenuNode, firstIndex)
+      }
       clear()
     }
 

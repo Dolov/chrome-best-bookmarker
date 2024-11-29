@@ -8,10 +8,11 @@ import type { BookmarkProps } from "../utils"
 
 const NewFolderAction: React.FC<{
   node: BookmarkProps
+  index: number
   visible: boolean
   onClose(): void
 }> = (props) => {
-  const { node, visible, onClose } = props
+  const { node, index, visible, onClose } = props
   const globalActions = React.useContext(GlobalActionContext)
 
   const [newFolderName, setNewFolderName] = React.useState("新建文件夹")
@@ -21,6 +22,7 @@ const NewFolderAction: React.FC<{
       {
         action: Message.CREATE_BOOKMARK,
         payload: {
+          index,
           title: newFolderName,
           parentId: node.id
         }
